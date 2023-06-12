@@ -1,60 +1,93 @@
-from flask import Flask, request
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from flask_cors import CORS
-import pymysql
 
-pymysql.install_as_MySQLdb()
+from models import db, User, Book
+from flask import Flask, request, jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, User
 
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
-CORS(app)
-
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
-class User(db.Model):
-    __tablename__ = 'users'
+with app.app_context():
+    db.create_all() # Creates tables 
 
-    UserID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    Name = db.Column(db.String(100), nullable=False)
-    Email = db.Column(db.String(100), unique=True, nullable=False)
-    PhoneNumber = db.Column(db.String(20), nullable=False)
-    Status = db.Column(db.Enum('Active', 'Inactive'), default='Active')
-
-    def __init__(self, Name, Email, PhoneNumber, Status):
-        self.Name = Name
-        self.Email = Email
-        self.PhoneNumber = PhoneNumber
-        self.Status = Status
 
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+
+    hashed_password = generate_password_hash(data['password'], method='sha256')
 
     new_user = User(
-        Name = data['name'],
-        Email = data['email'],
-        PhoneNumber = data['phone_number'],
-        Status = 'Active'
+        UserName=data['name'],
+        Email=data['email'],
+        PhoneNumber=data['phone_number'],
+        Password=hashed_password,
     )
 
     db.session.add(new_user)
     db.session.commit()
 
-    return {"message": "User registered successfully"}, 201
+    return jsonify({'message': 'New user created!'})
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-
     user = User.query.filter_by(Email=data['email']).first()
+    if not user or not check_password_hash(user.Password, data['password']):
+        return jsonify({'message': 'Invalid username or password'})
+    return jsonify({'message': 'Login successful!'})
 
-    if user and bcrypt.check_password_hash(user.Password, data['password']):
-        return {"message": "Logged in successfully"}, 200
+# Book module
+@app.route('/books', methods=['POST'])
+def add_book():
+    data = request.get_json()
 
-    return {"message": "Invalid credentials"}, 400
+    new_book = Book(
+        Title=data['title'],
+        Author=data['author'],
+        Genre=data['genre'],
+        ISBN=data['isbn'],
+        PublicationDate=data['publication_date'],
+        AvailabilityStatus='Available'
+    )
+
+    db.session.add(new_book)
+    db.session.commit()
+
+    return jsonify({'message': 'New book added!'})
+
+@app.route('/books/<int:book_id>/borrow', methods=['POST'])
+def borrow_book(book_id):
+    book = Book.query.get(book_id)
+
+    if book:
+        if book.AvailabilityStatus == 'Available':
+            book.AvailabilityStatus = 'Checked Out'
+            db.session.commit()
+            return jsonify({'message': 'Book borrowed successfully'})
+        else:
+            return jsonify({'message': 'Book is not available for borrowing'})
+    else:
+        return jsonify({'message': 'Book not found'})
+
+@app.route('/books/<int:book_id>/return', methods=['POST'])
+def return_book(book_id):
+    book = Book.query.get(book_id)
+
+    if book:
+        if book.AvailabilityStatus == 'Checked Out':
+            book.AvailabilityStatus = 'Available'
+            db.session.commit()
+            return jsonify({'message': 'Book returned successfully'})
+        else:
+            return jsonify({'message': 'Book is not checked out'})
+    else:
+        return jsonify({'message': 'Book not found'})
+
+if __name__ == "__main__":
+    app.run(port=8000, debug=True)
