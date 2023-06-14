@@ -9,7 +9,7 @@ class User(db.Model):
     UserName = db.Column(db.String(50), nullable=False)
     Email = db.Column(db.String(100), nullable=False, unique=True)
     PhoneNumber = db.Column(db.String(15), nullable=False, unique=True)
-    Password = db.Column(db.String(255), nullable=False) # It is highly recommended to hash password before storing it
+    Password = db.Column(db.String(255), nullable=False)
     Status = db.Column(db.String(10), nullable=False, default='Active')
 
 class Book(db.Model):
