@@ -68,5 +68,32 @@ def return_book(book_id):
         else:
             return jsonify({'message': 'Book is not checked out'})
 
+# return search
+@app.route('/books/return/search', methods=['POST'])
+def search_borrowed_books():
+    keyword = request.json.get('keyword')
+    with db.engine.connect() as connection:
+        result = connection.execute("SELECT * FROM books WHERE Title LIKE %s AND AvailabilityStatus = 'Checked Out'", ('%' + keyword + '%',))
+        books = result.fetchall()
+        if not books:
+            return jsonify({'message': 'No borrowed books found for the given keyword'})
+        else:
+            return jsonify({'books': [dict(book) for book in books]})
+
+
+# borrow search
+@app.route('/books/borrow/search', methods=['POST'])
+def search_available_books():
+    keyword = request.json.get('keyword')
+    with db.engine.connect() as connection:
+        result = connection.execute("SELECT * FROM books WHERE Title LIKE %s AND AvailabilityStatus = 'Available'", ('%' + keyword + '%',))
+        books = result.fetchall()
+        if not books:
+            return jsonify({'message': 'No available books found for the given keyword'})
+        else:
+            return jsonify({'books': [dict(book) for book in books]})
+
+
+
 if __name__ == "__main__":
     app.run(port=8000, debug=True)
