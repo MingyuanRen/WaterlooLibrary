@@ -45,56 +45,6 @@ def add_book():
     return jsonify({'message': 'New book added!'})
 
 
-# @app.route('/books/<int:book_id>/borrow', methods=['POST'])
-# def borrow_book(book_id):
-#     with db.engine.connect() as connection:
-#         result = connection.execute("SELECT * FROM books WHERE BookID = %s", (book_id, ))
-#         book = result.fetchone()
-#         if book and book['AvailabilityStatus'] == 'Available':
-#             connection.execute("UPDATE books SET AvailabilityStatus = 'Checked Out' WHERE BookID = %s", (book_id, ))
-#             return jsonify({'message': 'Book borrowed successfully'})
-#         elif not book:
-#             return jsonify({'message': 'Book not found'})
-#         else:
-#             return jsonify({'message': 'Book is not available for borrowing'})
-
-# @app.route('/books/<int:book_id>/return', methods=['POST'])
-# def return_book(book_id):
-#     with db.engine.connect() as connection:
-#         result = connection.execute("SELECT * FROM books WHERE BookID = %s", (book_id, ))
-#         book = result.fetchone()
-#         if book and book['AvailabilityStatus'] == 'Checked Out':
-#             connection.execute("UPDATE books SET AvailabilityStatus = 'Available' WHERE BookID = %s", (book_id, ))
-#             return jsonify({'message': 'Book returned successfully'})
-#         elif not book:
-#             return jsonify({'message': 'Book not found'})
-#         else:
-#             return jsonify({'message': 'Book is not checked out'})
-
-# # return search
-# @app.route('/books/return/search', methods=['POST'])
-# def search_borrowed_books():
-#     keyword = request.json.get('keyword')
-#     with db.engine.connect() as connection:
-#         result = connection.execute("SELECT * FROM books WHERE Title LIKE %s AND AvailabilityStatus = 'Checked Out'", ('%' + keyword + '%',))
-#         books = result.fetchall()
-#         if not books:
-#             return jsonify({'message': 'No borrowed books found for the given keyword'})
-#         else:
-#             return jsonify({'books': [dict(book) for book in books]})
-
-
-# # borrow search
-# @app.route('/books/borrow/search', methods=['POST'])
-# def search_available_books():
-#     keyword = request.json.get('keyword')
-#     with db.engine.connect() as connection:
-#         result = connection.execute("SELECT * FROM books WHERE Title LIKE %s AND AvailabilityStatus = 'Available'", ('%' + keyword + '%',))
-#         books = result.fetchall()
-#         if not books:
-#             return jsonify({'message': 'No available books found for the given keyword'})
-#         else:
-#             return jsonify({'books': [dict(book) for book in books]})
 
 @app.route('/books/search', methods=['GET'])
 def search_book():
@@ -119,7 +69,7 @@ def search_book():
 
     with db.engine.connect() as connection:
         result = connection.execute(sql_query, tuple(sql_values))
-        books = result.fetchall()
+        books = [dict(row) for row in result.fetchall()]
 
     if not books:
         return jsonify({'message': 'No books found'}), 404
