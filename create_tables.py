@@ -15,7 +15,7 @@ def create_tables():
                 name VARCHAR(255) NOT NULL,
                 email VARCHAR(100) NOT NULL UNIQUE,
                 phone VARCHAR(10) NOT NULL,
-                password VARCHAR(15) NOT NULL,
+                password VARCHAR(255) NOT NULL
             );
         """)
 
@@ -34,14 +34,16 @@ def create_tables():
 
         connection.execute("""
             CREATE TABLE IF NOT EXISTS MemberUsers(
-                uid INT PRIMARY KEY,
-                mID INT NOT NULL UNIQUE AUTO_INCREMENT,
+                uid INT NOT NULL,
+                mID INT PRIMARY KEY AUTO_INCREMENT,
                 points INT NOT NULL,
                 start_date DATE NOT NULL,
                 end_date DATE NOT NULL,
+                INDEX (uid),
                 FOREIGN KEY(uid) REFERENCES Users(uid)
             );
         """)
+
 
         connection.execute("""
             CREATE TABLE IF NOT EXISTS Gifts(
@@ -83,5 +85,9 @@ def create_tables():
         """)
 
 if __name__ == "__main__":
-    with app.app_context():
-        create_tables()
+    try:
+        with app.app_context():
+            create_tables()
+    except Exception as e:
+        print(str(e))
+
