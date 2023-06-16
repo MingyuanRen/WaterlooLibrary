@@ -10,25 +10,75 @@ db = SQLAlchemy(app)
 def create_tables():
     with db.engine.connect() as connection:
         connection.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                UserID INT PRIMARY KEY AUTO_INCREMENT,
-                UserName VARCHAR(50) NOT NULL,
-                Email VARCHAR(100) NOT NULL UNIQUE,
-                PhoneNumber VARCHAR(15) NOT NULL UNIQUE,
-                Password VARCHAR(255) NOT NULL,
-                Status VARCHAR(10) NOT NULL DEFAULT 'Active'
+            CREATE TABLE IF NOT EXISTS Users (
+                uid INT PRIMARY KEY AUTO_INCREMENT,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(100) NOT NULL UNIQUE,
+                phone VARCHAR(10) NOT NULL,
+                password VARCHAR(15) NOT NULL,
             );
         """)
 
         connection.execute("""
-            CREATE TABLE IF NOT EXISTS books (
-                BookID INT PRIMARY KEY AUTO_INCREMENT,
-                Title VARCHAR(255),
-                Author VARCHAR(255),
-                Genre VARCHAR(255),
-                ISBN VARCHAR(13),
-                PublicationDate DATE,
-                AvailabilityStatus ENUM('Available', 'Checked Out', 'Reserved') DEFAULT 'Available'
+            CREATE TABLE IF NOT EXISTS Books(
+                ISBN VARCHAR(13) PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                author VARCHAR(255) NOT NULL,
+                year_of_publication DATE,
+                publisher VARCHAR(255),
+                genre VARCHAR(50),
+                inventory INT NOT NULL,
+                price DECIMAL(10,2) NOT NULL
+            );
+        """)
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS MemberUsers(
+                uid INT PRIMARY KEY,
+                mID INT NOT NULL UNIQUE AUTO_INCREMENT,
+                points INT NOT NULL,
+                start_date DATE NOT NULL,
+                end_date DATE NOT NULL,
+                FOREIGN KEY(uid) REFERENCES Users(uid)
+            );
+        """)
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS Gifts(
+                item VARCHAR(255) PRIMARY KEY,
+                point_need INT NOT NULL,
+                inventory INT NOT NULL
+            );
+        """)
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS BorrowRecord(
+                rid INT PRIMARY KEY AUTO_INCREMENT,
+                uid INT NOT NULL REFERENCES Users(uid),
+                ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
+                renewable BOOLEAN NOT NULL,
+                DateBorrowed DATE NOT NULL,
+                DateDue DATE NOT NULL,
+                DateReturned DATE NOT NULL
+            );
+        """)
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS Reservation(
+                uid INT NOT NULL REFERENCES MemberUsers(uid),
+                ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
+                DateReserved DATE NOT NULL,
+                ExpireDate DATE NOT NULL,
+                PRIMARY KEY(uid, ISBN)
+            );
+        """)
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS Redemption(
+                uid INT NOT NULL REFERENCES MemberUsers(uid),
+                item VARCHAR(255) NOT NULL REFERENCES Gifts(item),
+                date Date NOT NULL,
+                PRIMARY KEY(uid, item)
             );
         """)
 
