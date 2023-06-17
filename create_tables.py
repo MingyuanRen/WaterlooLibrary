@@ -61,7 +61,7 @@ def create_tables():
                 renewable BOOLEAN NOT NULL,
                 DateBorrowed DATE NOT NULL,
                 DateDue DATE NOT NULL,
-                DateReturned DATE NOT NULL
+                DateReturned DATE
             );
         """)
 

@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timedelta
+from flask import jsonify, request
+from sqlalchemy.sql import text
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library'
@@ -75,6 +78,45 @@ def search_book():
         return jsonify({'message': 'No books found'}), 404
 
     return jsonify(books)
+
+
+@app.route('/books/borrow', methods=['POST'])
+def borrow_book():
+    data = request.get_json()
+
+    if not data or 'uid' not in data or 'isbn' not in data:
+        return jsonify({'message': 'You need to provide both user ID (uid) and ISBN of the book'}), 400
+
+    uid = data['uid']
+    isbn = data['isbn']
+
+    with db.engine.connect() as connection:
+        # Check if the book is available
+        book = connection.execute(text("SELECT * FROM Books WHERE ISBN = :isbn"), {"isbn": isbn}).fetchone()
+        if not book or book['inventory'] <= 0:
+            return jsonify({'message': 'This book is not available'}), 400
+
+        # Decrease the book inventory
+        connection.execute(text("UPDATE Books SET inventory = inventory - 1 WHERE ISBN = :isbn"), {"isbn": isbn})
+
+        # Record the borrowing operation
+        DateBorrowed = datetime.now()
+        DateDue = DateBorrowed + timedelta(days=14)  # Assuming the book is due in two weeks
+        borrow_record = {
+            "uid": uid,
+            "ISBN": isbn,
+            "renewable": True,  # Assuming the book can be renewed
+            "DateBorrowed": DateBorrowed,
+            "DateDue": DateDue,
+            "DateReturned": None  # Setting DateReturned to None initially
+        }
+
+        connection.execute(text("""
+            INSERT INTO BorrowRecord (uid, ISBN, renewable, DateBorrowed, DateDue, DateReturned) 
+            VALUES (:uid, :ISBN, :renewable, :DateBorrowed, :DateDue, :DateReturned)
+        """), borrow_record)
+
+    return jsonify({'message': 'Book borrowed successfully'})
 
 
 
