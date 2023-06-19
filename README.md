@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS Redemption(
     date Date NOT NULL,
     PRIMARY KEY(uid, item)
 );
-
+```
 
 ## How to Create Database 
 1. Create library schema in MySQL server or MySQL Workbench
