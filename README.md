@@ -17,7 +17,7 @@ You need to have the following installed:
 2. Open MySQL Workbench (or connect to your MySQL server through the terminal) and run the following commands to create the necessary tables for the application:
 
 
-## Setting Up the Flask Server, Create and Load database to Flask 
+## Setting Up the Flask, MySQL
 
 To connect Flask to MySQL, we use an ORM (Object-Relational Mapper) like SQLAlchemy along with a connection library like PyMySQL. 
 This will allow Flask application to interact with MySQL database using Python code.
@@ -28,13 +28,7 @@ This will allow Flask application to interact with MySQL database using Python c
   pip install flask flask_sqlalchemy flask_cors pymysql
 ```
 
-2.Run the Flask server:
-
-```bash
-  export FLASK_APP=app.py  # On Windows use `set FLASK_APP=app.py`
-  flask run
-```
-3. Flask application to connect to MySQL with something like this:
+2. Flask application to connect to MySQL with something like this:
 
 ```python
 from flask import Flask
@@ -46,83 +40,206 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 ```
-4.  In Flask representing tables in the database:
-For Example:
-```python
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(100), unique=True)
 
-    def __repr__(self):
-        return '<User %r>' % self.name
-```
-And if you want to create a new user:
-```python
-@app.route('/create_user')
-def create_user():
-    new_user = User(name='John', email='john@example.com')
-    db.session.add(new_user)
-    db.session.commit()
-    return 'New user has been created.'
-```
-Insert sample data:
-```python
-    new_user = User(name='John', email='john@example.com')
-    db.session.add(new_user)
-    db.session.commit()
-    return 'New user has been created.'
-```
-
-5. SQL SCHEMA
+3. SQL SCHEMA
 ```sql
 CREATE DATABASE LibraryDB;
 
 USE LibraryDB;
 
-CREATE TABLE Books (
-    BookID INT PRIMARY KEY,
-    Title VARCHAR(255),
-    Author VARCHAR(255),
-    Genre VARCHAR(255),
-    ISBN VARCHAR(13),
-    PublicationDate DATE,
-    AvailabilityStatus ENUM('Available', 'Checked Out', 'Reserved')
+CREATE TABLE IF NOT EXISTS Users (
+    uid INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(10) NOT NULL,
+    password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Users (
-    UserID INT PRIMARY KEY,
-    Name VARCHAR(255),
-    Email VARCHAR(255),
-    PhoneNumber VARCHAR(15),
-    Status ENUM('Active', 'Inactive')
+CREATE TABLE IF NOT EXISTS Books(
+    ISBN VARCHAR(13) PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    year_of_publication DATE,
+    publisher VARCHAR(255),
+    genre VARCHAR(50),
+    inventory INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL
 );
 
-CREATE TABLE BorrowingRecords (
-    RecordID INT PRIMARY KEY,
-    UserID INT,
-    BookID INT,
-    DateBorrowed DATE,
-    DueDate DATE,
-    DateReturned DATE,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (BookID) REFERENCES Books(BookID)
+CREATE TABLE IF NOT EXISTS MemberUsers(
+    uid INT NOT NULL,
+    mID INT PRIMARY KEY AUTO_INCREMENT,
+    points INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    INDEX (uid),
+    FOREIGN KEY(uid) REFERENCES Users(uid)
 );
 
-CREATE TABLE Reservations (
-    ReservationID INT PRIMARY KEY,
-    UserID INT,
-    BookID INT,
-    DateReserved DATE,
-    ExpirationDate DATE,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (BookID) REFERENCES Books(BookID)
+CREATE TABLE IF NOT EXISTS Gifts(
+    item VARCHAR(255) PRIMARY KEY,
+    point_need INT NOT NULL,
+    inventory INT NOT NULL
 );
 
-CREATE TABLE Fines (
-    FineID INT PRIMARY KEY,
-    UserID INT,
-    Amount DECIMAL(8, 2),
-    DatePaid DATE,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+CREATE TABLE IF NOT EXISTS BorrowRecord(
+    rid INT PRIMARY KEY AUTO_INCREMENT,
+    uid INT NOT NULL REFERENCES Users(uid),
+    ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
+    renewable BOOLEAN NOT NULL,
+    DateBorrowed DATE NOT NULL,
+    DateDue DATE NOT NULL,
+    DateReturned DATE
 );
+
+CREATE TABLE IF NOT EXISTS Reservation(
+    uid INT NOT NULL REFERENCES MemberUsers(uid),
+    ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
+    DateReserved DATE NOT NULL,
+    ExpireDate DATE NOT NULL,
+    PRIMARY KEY(uid, ISBN)
+);
+
+CREATE TABLE IF NOT EXISTS Redemption(
+    uid INT NOT NULL REFERENCES MemberUsers(uid),
+    item VARCHAR(255) NOT NULL REFERENCES Gifts(item),
+    date Date NOT NULL,
+    PRIMARY KEY(uid, item)
+);
+
+
+## How to Create Database 
+1. Create library schema in MySQL server or MySQL Workbench
+2. Change config for local database  
+ Change Database config to your local machine in create_tables.py file
+ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://yourdbname:yourdbpassword@localhost/library'
+
+3. run the following command
+```bash
+  python3 create_tables.py
+```
+
+## How to Load Sample Data and Update Tables
+1. Create library schema in MySQL server or MySQL Workbench
+2. Change config for local database  
+ Change Database config to your local machine in update_tables.py file
+ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://yourdbname:yourdbpassword@localhost/library'
+
+3. Change the sample data in update_tables.py file
+4. Run the following command
+```bash
+  python3 update_tables.py
+```
+5. Verify Data(Using MySQL)
+```bash
+  SELECT * FROM users;
+```
+
+## How to Run Flask Server
+after you set up the config for Flask, MySQL and done creating your local database,
+Run the Flask server:
+
+```bash
+  flask run --port 8000
+```
+
+## Current Supporting Features
+
+1. Register User
+Once you run the Flask Application, you can test it with PostMan by sending post request to http://localhost:8000/register and using json object as body:
+```bash
+    {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "1234567890",
+        "password": "password123"
+    }
+```
+
+You should be able to see this, if the user has been successfully registered:
+```bash
+    {
+        "message": "New user created!"
+    }
+```
+
+2. Login User
+Sending post request to http://localhost:8000/login and using json object as body:
+```bash
+    {
+        "email": "john@example.com",
+        "password": "password123"
+    }
+```
+You should be able to see this, if the user successfully login:
+```bash
+    {
+        "message": "Login successful!"
+    }
+```
+3. Add Books
+Sending post request to http://localhost:8000/books and using json object as body:
+```bash
+    {
+        "isbn": "978-3-16-148410-0",
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "year_of_publication": "1925",
+        "publisher": "Charles Scribner's Sons",
+        "genre": "Novel",
+        "inventory": 10,
+        "price": 15.99
+    }
+```
+You should be able to see this, if boos has been successfully added:
+```bash
+    {
+        "message": "New book added!"
+    }
+```
+
+4. Seach Book
+Sending Get request to http://localhost:8000/books/search?title=Great and using params { "title" : "Great" }
+In this Example, the keyword for title "Great" is used, currently we support ['title', 'author', 'isbn', 'genre'] as keyword(you can use mutiple of these for search)
+
+You should be able to see all the books with title contains Great
+```bash
+[
+    {
+        "ISBN": "9783161484100",
+        "author": "F. Scott Fitzgerald",
+        "genre": "Novel",
+        "inventory": 10,
+        "price": "15.99",
+        "publisher": "Charles Scribner's Sons",
+        "title": "The Great Gatsby",
+        "year_of_publication": "Thu, 01 Jan 1925 00:00:00 GMT"
+    },
+    {
+        "ISBN": "9783161484110",
+        "author": "F. Scott Fitzgerald",
+        "genre": "Novel",
+        "inventory": 6,
+        "price": "15.99",
+        "publisher": "Charles Scribner's Sons",
+        "title": "The Great Gatsby",
+        "year_of_publication": "Thu, 01 Jan 1925 00:00:00 GMT"
+    }
+]
+```
+
+5. Borrow Books
+Sending Post request to http://localhost:8000/books/borrow and and using json object as body:
+Suppose you are number 1 user, and you want to borrow The Great Gatsby which has 9783161484110 as isbn
+```bash
+    {
+        "uid": "1",
+        "isbn": "9783161484110"
+    }
+```
+You should be able to see this json object as return if you borrow this book successfully
+```bash
+    {
+        'message': 'Book borrowed successfully'
+    }
+```
