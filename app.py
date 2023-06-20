@@ -118,6 +118,38 @@ def borrow_book():
 
     return jsonify({'message': 'Book borrowed successfully'})
 
+@app.route('/books/return', methods=['POST'])
+def return_book():
+    data = request.get_json()
+
+    if not data or 'uid' not in data or 'isbn' not in data:
+        return jsonify({'message': 'You need to provide both user ID (uid) and ISBN of the book'}), 400
+
+    uid = data['uid']
+    isbn = data['isbn']
+
+    with db.engine.connect() as connection:
+        # Check if the user has borrowed the book
+        borrow_record = connection.execute(text("""
+            SELECT * FROM BorrowRecord 
+            WHERE ISBN = :isbn AND uid = :uid AND DateReturned IS NULL
+        """), {"isbn": isbn, "uid": uid}).fetchone()
+
+        if not borrow_record:
+            return jsonify({'message': 'No record found of this user borrowing this book'}), 400
+
+        # Update the record to show that the book has been returned
+        DateReturned = datetime.now()
+        connection.execute(text("""
+            UPDATE BorrowRecord 
+            SET DateReturned = :DateReturned
+            WHERE ISBN = :isbn AND uid = :uid AND DateReturned IS NULL
+        """), {"DateReturned": DateReturned, "isbn": isbn, "uid": uid})
+
+        # Increase the book inventory
+        connection.execute(text("UPDATE Books SET inventory = inventory + 1 WHERE ISBN = :isbn"), {"isbn": isbn})
+
+    return jsonify({'message': 'Book returned successfully'})
 
 
 if __name__ == "__main__":
