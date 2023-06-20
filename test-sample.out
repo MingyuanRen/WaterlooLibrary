@@ -1,0 +1,28 @@
+Login(Search for user):
+(11, 'example_user', 'example@gmail.com', '123456789', 'password')
+
+Search for Book(by title):
+('12345678', 'example book', 'author', datetime.date(2020, 1, 1), 'publiser', 'Fiction', 10, Decimal('31.00'))
+
+Search for Book(by ISBN):
+('12345678', 'example book', 'author', datetime.date(2020, 1, 1), 'publiser', 'Fiction', 10, Decimal('31.00'))
+
+Search for points:
+(10000,)
+
+Display gifts:
+('Airpods', 2000, 2)
+('pencil', 20, 20)
+
+Check reservation of a user:
+(1, '0195153448', datetime.date(2022, 3, 4), datetime.date(2023, 1, 1))
+(1, '0393045218', datetime.date(2022, 3, 4), datetime.date(2023, 1, 1))
+
+Check BorrowRecord of a user:
+(1, 1, '0393045218', 1, datetime.date(2020, 1, 1), datetime.date(2020, 2, 1), datetime.date(2020, 1, 15))
+(2, 1, '0195153448', 0, datetime.date(2020, 1, 1), datetime.date(2020, 2, 1), datetime.date(2020, 2, 1))
+(3, 1, '12345678', 1, datetime.date(2023, 6, 17), datetime.date(2023, 7, 17), datetime.date(2023, 6, 17))
+
+Check BorrowRecord of a book:
+(3, 1, '12345678', 1, datetime.date(2023, 6, 17), datetime.date(2023, 7, 17), datetime.date(2023, 6, 17))
+
