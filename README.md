@@ -142,6 +142,21 @@ Run the Flask server:
 ```bash
   flask run --port 8000
 ```
+## Current Design of the GUI (To be Updated)
+Register and Login Page: A secured register and login system for users.
+
+User Info Page: A page showing the infomation of specific user including personal info, borrow record, reservation record and redemption(for MemberUser).
+
+Search Book Page: A page showing a list/table of books with details (like ISBN, title, author, year of publication, publisher, genre, inventory, price)
+Search bar to filter the list by different criteria (like title, author, ISBN).
+
+Issue and Return Management: A system for checking books in and out, and updating the status of the books.
+
+Redemption Page: A page for Redemption.
+
+Fine Management: A page to track these, issue reminders, and process payments.
+
+Reservations: A page allowing users to reserve books that are currently borrowed by others.
 
 ## Current Supporting Features
 
