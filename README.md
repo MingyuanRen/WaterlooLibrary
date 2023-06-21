@@ -261,4 +261,5 @@ You should be able to see this json object as return if you borrow this book suc
 
 ## Sample SQL
 -- All the queries in the test-sample.sql are been given using actual examples
+
 -- The actuall implementation of the queries in the application includes changes on the actual values 
