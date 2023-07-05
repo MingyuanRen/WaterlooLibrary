@@ -18,7 +18,12 @@ def create_tables():
                 password VARCHAR(255) NOT NULL
             );
         """)
-
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS Administrators (
+                aid INT PRIMARY KEY AUTO_INCREMENT,
+                uid INT REFERENCES Users(uid)
+            );
+        """)
         connection.execute("""
             CREATE TABLE IF NOT EXISTS Books(
                 ISBN VARCHAR(13) PRIMARY KEY,
