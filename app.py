@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from flask import jsonify, request
 from sqlalchemy.sql import text
+from flask import abort
+from flask import make_response
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library'
@@ -23,6 +25,9 @@ def register():
         
     return jsonify({'message': 'New user created!'})
 
+
+
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -30,10 +35,15 @@ def login():
     with db.engine.connect() as connection:
         result = connection.execute("SELECT * FROM Users WHERE email = %s", (data['email'], ))
         user = result.fetchone()
-        if not user or not check_password_hash(user['password'], data['password']):
-            return jsonify({'message': 'Invalid username or password'})
-    
+
+        if not user:
+            return make_response(jsonify({'error': 'User does not exist'}), 401)
+
+        if not check_password_hash(user['password'], data['password']):
+            return make_response(jsonify({'error': 'Invalid password'}), 401)
+
     return jsonify({'message': 'Login successful!'})
+
 
 
 # Book module
