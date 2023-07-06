@@ -4,18 +4,25 @@ import { Login } from './components/Login';
 import { Register } from './components/Register';
 import { Home } from './components/Home';
 import { HomePage } from './components/HomePage'; 
+import React, { useState } from 'react';
+import { UserContext } from './UserContext';
 
 const App = () => {
+  const [user, setUser] = useState(null);
+  
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/homepage" element={<HomePage />} />
-        <Route path="/home" element={<Home />} />
-        {/* Add the following route */}
-        <Route path="/" element={<Navigate to="/homepage" />} />
-      </Routes>
+      <UserContext.Provider value={{ user, setUser }}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/homepage" element={<HomePage />} />
+          <Route path="/home" element={<Home />} />
+          {/* Add the following route */}
+          <Route path="/" element={<Navigate to="/homepage" />} />
+        </Routes>
+      </UserContext.Provider>
+
     </Router>
   );
 };

@@ -6,8 +6,10 @@ from flask import jsonify, request
 from sqlalchemy.sql import text
 from flask import abort
 from flask import make_response
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -26,8 +28,6 @@ def register():
     return jsonify({'message': 'New user created!'})
 
 
-
-
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -44,6 +44,20 @@ def login():
 
     return jsonify({'message': 'Login successful!'})
 
+# Get user info by email
+@app.route('/user', methods=['GET'])
+def get_user():
+    email = request.args.get('email')
+    
+    with db.engine.connect() as connection:
+        result = connection.execute(text("SELECT name, email, phone FROM Users WHERE email = :email"), {'email': email})
+
+    user = result.fetchone()
+
+    if user is None:
+        return jsonify({'error': 'User not found'}), 404
+
+    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2]})
 
 
 # Book module

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store'; // import the action from your store
 import './Register.css';
 
 export const Register = () => {
@@ -12,6 +14,7 @@ export const Register = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
 
   const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -20,9 +23,12 @@ export const Register = () => {
   const register = async e => {
     e.preventDefault();
     try {
-      await axios.post('/register', data);
-      alert('New user created!');
-      navigate('/homepage'); // redirect to home page
+      const response = await axios.post('/register', data);
+      if (response.data.message === 'New user created!') {
+        alert(response.data.message);
+        dispatch(setUser(data)); // Dispatch setUser action with the original data
+        navigate('/home'); // redirect to home page
+      }
     } catch (error) {
       alert('Error while registering');
     }
