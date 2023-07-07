@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../store'; // import the action from your store
+import { setUser } from '../store'; 
 import './Login.css';
 
 export const Login = () => {
@@ -12,7 +12,7 @@ export const Login = () => {
   });
 
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -25,20 +25,21 @@ export const Login = () => {
       if (res.data.message === 'Login successful!') {
         alert('Login successful!');
         
-        // After successful login, fetch the user's details
-        console.log("data", data)
         const userDetails = await axios.get(`http://localhost:8000/user?email=${data.email}`);
-
         console.log("user:", userDetails.data);
-        dispatch(setUser(userDetails.data)); // Dispatch setUser action with the user data from response
-  
-        navigate('/home'); // redirect to home page
+        dispatch(setUser(userDetails.data));
+
+        // Check if the user is an administrator and navigate accordingly
+        if (res.data.is_admin) {
+          navigate('/admin-home'); // redirect to admin home page
+        } else {
+          navigate('/home'); // redirect to user home page
+        }
       }
     } catch (error) {
-      alert(error.response.data.error);  // Display the error message from the server
+      alert(error.response.data.error);
     }
   };
-  
 
   return (
     <div className="container">

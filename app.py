@@ -7,6 +7,7 @@ from sqlalchemy.sql import text
 from flask import abort
 from flask import make_response
 from flask_cors import CORS
+from sqlalchemy import text
 
 app = Flask(__name__)
 CORS(app)
@@ -28,6 +29,8 @@ def register():
     return jsonify({'message': 'New user created!'})
 
 
+
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -42,7 +45,15 @@ def login():
         if not check_password_hash(user['password'], data['password']):
             return make_response(jsonify({'error': 'Invalid password'}), 401)
 
-    return jsonify({'message': 'Login successful!'})
+        # Check if the user is an administrator
+        admin_result = connection.execute(text("SELECT * FROM Administrators WHERE uid = :uid"), {'uid': user['uid']})
+        admin = admin_result.fetchone()
+
+        # If the user is an admin, return an additional attribute in the response
+        if admin:
+            return jsonify({'message': 'Login successful!', 'is_admin': True})
+        else:
+            return jsonify({'message': 'Login successful!', 'is_admin': False})
 
 # Get user info by email
 @app.route('/user', methods=['GET'])
