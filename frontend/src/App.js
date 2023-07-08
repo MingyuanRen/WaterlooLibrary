@@ -1,14 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
+import { Home } from './components/Home';
+import { HomePage } from './components/HomePage'; 
+import { AdminHome } from './components/AdminHome';
+import React, { useState } from 'react';
+import { UserContext } from './UserContext';
 
 const App = () => {
+  const [user, setUser] = useState(null);
+
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+      <UserContext.Provider value={{ user, setUser }}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/homepage" element={<HomePage />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/admin-home" element={<AdminHome />} />
+          {/* Add the following route */}
+          <Route path="/" element={<Navigate to="/homepage" />} />
+        </Routes>
+      </UserContext.Provider>
+
     </Router>
   );
 };
