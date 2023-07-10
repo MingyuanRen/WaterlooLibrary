@@ -7,12 +7,16 @@ import { HomePage } from './components/HomePage';
 import { AdminHome } from './components/AdminHome';
 import React, { useState } from 'react';
 import { UserContext } from './UserContext';
+import UserHome from './components/UserPage/UserHome';
+import UserProfile from './components/UserPage/UserProfile'
+import BookRecords from './components/UserPage/BookRecords'
 
 const App = () => {
   const [user, setUser] = useState(null);
 
   return (
     <Router>
+      {/* <main className="py-3"> */}
       <UserContext.Provider value={{ user, setUser }}>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -20,11 +24,14 @@ const App = () => {
           <Route path="/homepage" element={<HomePage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin-home" element={<AdminHome />} />
+          <Route path="/user-home" element={<UserHome />} />
+          <Route path="/user-profile" element={<UserProfile />} />
+          <Route path="/bookrecords" element={<BookRecords />} />
           {/* Add the following route */}
           <Route path="/" element={<Navigate to="/homepage" />} />
         </Routes>
       </UserContext.Provider>
-
+      {/* </main> */}
     </Router>
   );
 };

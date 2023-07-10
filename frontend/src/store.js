@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit'
+import accountReducer from './states/account/accountSlice'
 
 const userSlice = createSlice({
   name: 'user',
@@ -13,6 +14,7 @@ export const { setUser } = userSlice.actions;
 const store = configureStore({
   reducer: {
     user: userSlice.reducer,
+    account: accountReducer
   },
 });
 

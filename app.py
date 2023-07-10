@@ -7,7 +7,7 @@ from sqlalchemy.sql import text
 from flask import abort
 from flask import make_response
 from flask_cors import CORS
-from sqlalchemy import text
+from sqlalchemy import text, select
 
 app = Flask(__name__)
 CORS(app)
@@ -15,6 +15,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+class User(db.Model):
+    __tablename__ = 'Users'
+
+    uid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    phone = db.Column(db.String(10), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+
+
 
 # user module
 @app.route('/register', methods=['POST'])
@@ -28,8 +39,52 @@ def register():
         
     return jsonify({'message': 'New user created!'})
 
+##############################################################################################
+@app.route('/api/userinfo/account', methods=['POST'])
+def getAccountInfo():
+    data = request.get_json()
+    if "email" not in data:
+        return make_response(jsonify({'error': 'No Email is passed in from body'}), 401)
+    
+    userInfo = None
+    try:
+        statement = select(User).where(User.email == data["email"])
+        with db.engine.connect() as connection:
+            result = connection.execute(statement).fetchone()
+            userInfo = dict(result._mapping)
+            if userInfo == None: raise Exception()
+    
+    except:
+        return make_response(jsonify({'error': 'User Not found'}), 401)
+    
+    return jsonify(userInfo)
 
 
+@app.route('/api/userinfo/bookstatus', methods=['POST'])
+def getBooks():
+    data = request.get_json()
+    print(data)
+    if "uid" not in data:
+        return make_response(jsonify({'error': 'No Uid is passed in from body'}), 401)
+
+    booksData = []
+    try:
+        statement = "SELECT title, author, DateBorrowed, DateDue FROM BorrowRecord r LEFT JOIN Books b ON r.ISBN = b.ISBN LEFT JOIN Users u ON u.uid = r.uid  WHERE u.uid = %s AND DateReturned IS NULL"
+        with db.engine.connect() as connection:
+            result = connection.execute(statement, (data["uid"],)).fetchall()
+            print("hello world")
+            for record in result:
+                booksData.append(dict(record._mapping))
+            print(booksData)
+            if not booksData:
+                raise Exception()
+
+    except Exception as e:
+        print(e)
+
+    return jsonify(booksData)
+
+##############################################################################################
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -46,14 +101,14 @@ def login():
             return make_response(jsonify({'error': 'Invalid password'}), 401)
 
         # Check if the user is an administrator
-        admin_result = connection.execute(text("SELECT * FROM Administrators WHERE uid = :uid"), {'uid': user['uid']})
-        admin = admin_result.fetchone()
+        # admin_result = connection.execute("SELECT * FROM Administrators WHERE uid = :uid", {'uid': user['uid']})
+        # admin = admin_result.fetchone()
 
-        # If the user is an admin, return an additional attribute in the response
-        if admin:
-            return jsonify({'message': 'Login successful!', 'is_admin': True})
-        else:
-            return jsonify({'message': 'Login successful!', 'is_admin': False})
+        # # If the user is an admin, return an additional attribute in the response
+        # if admin:
+        #     return jsonify({'message': 'Login successful!', 'is_admin': True})
+        # else:
+        return jsonify({'message': 'Login successful!', 'is_admin': False})
 
 # Get user info by email
 @app.route('/user', methods=['GET'])
@@ -61,14 +116,14 @@ def get_user():
     email = request.args.get('email')
     
     with db.engine.connect() as connection:
-        result = connection.execute(text("SELECT name, email, phone FROM Users WHERE email = :email"), {'email': email})
+        result = connection.execute(text("SELECT name, email, phone, uid FROM Users WHERE email = :email"), {'email': email})
 
     user = result.fetchone()
 
     if user is None:
         return jsonify({'error': 'User not found'}), 404
 
-    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2]})
+    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2], 'uid': user[3]})
 
 
 # Book module
@@ -185,6 +240,7 @@ def return_book():
         connection.execute(text("UPDATE Books SET inventory = inventory + 1 WHERE ISBN = :isbn"), {"isbn": isbn})
 
     return jsonify({'message': 'Book returned successfully'})
+
 
 
 if __name__ == "__main__":
