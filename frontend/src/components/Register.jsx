@@ -27,7 +27,8 @@ export const Register = () => {
       if (response.data.message === 'New user created!') {
         alert(response.data.message);
         dispatch(setUser(data)); // Dispatch setUser action with the original data
-        navigate('/home'); // redirect to home page
+        // navigate('/home'); // redirect to home page
+        navigate('/user-home', { state: { user: data } }); // redirect to user home page
       }
     } catch (error) {
       alert('Error while registering');
