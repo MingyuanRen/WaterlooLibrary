@@ -4,6 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from flask import jsonify, request
 from sqlalchemy.sql import text
+from flask import abort
+from flask import make_response
+from flask_cors import CORS
+from sqlalchemy import text
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:458i*488P@localhost:3306/library'
@@ -23,6 +27,9 @@ def register():
         
     return jsonify({'message': 'New user created!'})
 
+
+
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -30,10 +37,37 @@ def login():
     with db.engine.connect() as connection:
         result = connection.execute("SELECT * FROM Users WHERE email = %s", (data['email'], ))
         user = result.fetchone()
-        if not user or not check_password_hash(user['password'], data['password']):
-            return jsonify({'message': 'Invalid username or password'})
+
+        if not user:
+            return make_response(jsonify({'error': 'User does not exist'}), 401)
+
+        if not check_password_hash(user['password'], data['password']):
+            return make_response(jsonify({'error': 'Invalid password'}), 401)
+
+        # Check if the user is an administrator
+        admin_result = connection.execute(text("SELECT * FROM Administrators WHERE uid = :uid"), {'uid': user['uid']})
+        admin = admin_result.fetchone()
+
+        # If the user is an admin, return an additional attribute in the response
+        if admin:
+            return jsonify({'message': 'Login successful!', 'is_admin': True})
+        else:
+            return jsonify({'message': 'Login successful!', 'is_admin': False})
+
+# Get user info by email
+@app.route('/user', methods=['GET'])
+def get_user():
+    email = request.args.get('email')
     
-    return jsonify({'message': 'Login successful!'})
+    with db.engine.connect() as connection:
+        result = connection.execute(text("SELECT name, email, phone FROM Users WHERE email = :email"), {'email': email})
+
+    user = result.fetchone()
+
+    if user is None:
+        return jsonify({'error': 'User not found'}), 404
+
+    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2]})
 
 
 # Book module
