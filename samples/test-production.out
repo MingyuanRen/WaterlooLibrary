@@ -1,0 +1,88 @@
+User Login:
+(11, 'example_user', 'example@gmail.com', '123456789', 'password')
+
+Search Book(Title):
+('12345678', 'example book', 'author', datetime.date(2020, 1, 1), 'publiser', 10, Decimal('31.00'))
+
+Search Book(ISBN):
+('0001047213', 'The Fighting Man', 'Gerald Seymour', datetime.date(1993, 1, 1), 'HarperCollins Publishers', 47, Decimal('82.10'))
+
+Check points (of current user):
+(10000,)
+
+Display gifts:
+('Airpods', 2000, 2)
+('pencil', 20, 18)
+
+Display gifts:
+(1, '0195153448', datetime.date(2022, 3, 4), datetime.date(2023, 1, 1))
+(1, '0393045218', datetime.date(2022, 3, 4), datetime.date(2023, 1, 1))
+
+Check borrow record of current user:
+(1, 1, '0393045218', 1, datetime.date(2020, 1, 1), datetime.date(2020, 2, 1), datetime.date(2020, 1, 15))
+(2, 1, '0195153448', 0, datetime.date(2020, 1, 1), datetime.date(2020, 2, 1), datetime.date(2020, 2, 1))
+(3, 1, '12345678', 1, datetime.date(2023, 6, 17), datetime.date(2023, 7, 17), datetime.date(2023, 6, 17))
+(4, 1, '00000', 1, datetime.date(2023, 7, 8), datetime.date(2023, 8, 9), datetime.date(2023, 7, 10))
+(6, 1, '0002005018', 1, datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), datetime.date(2020, 5, 10))
+(7, 1, '0002005018', 1, datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), None)
+
+Check borrow record of a book:
+(3, 1, '12345678', 1, datetime.date(2023, 6, 17), datetime.date(2023, 7, 17), datetime.date(2023, 6, 17))
+
+Check if user is member:
+(1, 1, 199970, datetime.date(2023, 6, 18), datetime.date(2024, 6, 16))
+
+Check the limit for borrowed books per user:
+(1,)
+
+Check if the book with sample_isbn is available:
+(19,)
+
+If 3 returns an inventory greater than 1, then we will first update inventory:
+('000104799X', "Monk's-hood", 'Ellis Peters', datetime.date(1994, 1, 1), 'HarperCollins Publishers', 18, Decimal('27.80'))
+
+Insert into BookRecord table where:
+(8, 1, '000104799X', 1, datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), None)
+
+Check if current user is a member:
+(199970,)
+
+Check if current user has enough points and if ample_gift has inventory > 0:
+(20, 18)
+
+Update inventory of sample_gift:
+('pencil', 20, 17)
+
+Update user points:
+(1, 1, 199950, datetime.date(2023, 6, 18), datetime.date(2024, 6, 16))
+
+Insert into Redemption where:
+(1, 'pencil', datetime.date(2020, 1, 1))
+(1, 'pencil', datetime.date(2020, 1, 1))
+
+check if the return date of the book is already after the expected duedate:
+(datetime.date(2020, 5, 14),)
+
+update the return date of that book to be today in the BorrowRecord table.:
+(8, 1, '000104799X', 1, datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), datetime.date(2020, 5, 10))
+
+check if current user is a member:
+(1, 1, 199950, datetime.date(2023, 6, 18), datetime.date(2024, 6, 16))
+
+add points to membership account:
+(1, 1, 199960, datetime.date(2023, 6, 18), datetime.date(2024, 6, 16))
+
+Check if the user is already registered in the system:
+
+Registration:
+(13, 'sample', 'sample@gmail.com', '1234567890', 'password')
+
+Login:
+('The Mummies of Urumchi', 'E. J. W. Barber', datetime.date(2020, 1, 1), datetime.date(2020, 2, 1), datetime.date(2020, 1, 15))
+('Classical Mythology', 'Mark P. O. Morford', datetime.date(2020, 1, 1), datetime.date(2020, 2, 1), datetime.date(2020, 2, 1))
+('example book', 'author', datetime.date(2023, 6, 17), datetime.date(2023, 7, 17), datetime.date(2023, 6, 17))
+('react testing book', 'test', datetime.date(2023, 7, 8), datetime.date(2023, 8, 9), datetime.date(2023, 7, 10))
+('Clara Callan', 'Richard Bruce Wright', datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), datetime.date(2020, 5, 10))
+('Clara Callan', 'Richard Bruce Wright', datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), None)
+("Monk's-hood", 'Ellis Peters', datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), datetime.date(2020, 5, 10))
+

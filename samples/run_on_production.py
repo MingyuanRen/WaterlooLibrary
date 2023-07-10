@@ -39,7 +39,7 @@ def run_sample_sql():
 
         result = connection.execute(text(
             """
-            SELECT * FROM Books WHERE ISBN LIKE '12345678'
+            SELECT * FROM Books WHERE ISBN LIKE '0001047213'
             """
         ))
         print("Search Book(ISBN):")
@@ -124,7 +124,7 @@ def run_sample_sql():
         ## 3. Check if the book with sample_isbn is available
         result = connection.execute(text(
             """
-            SELECT inventory FROM Books WHERE ISBN = "0002005018";
+            SELECT inventory FROM Books WHERE ISBN = "000104799X";
             """
         ))
         print("Check if the book with sample_isbn is available:")
@@ -136,13 +136,13 @@ def run_sample_sql():
         result = connection.execute(text(
             """
             UPDATE Books SET inventory = inventory - 1
-            WHERE ISBN = "0002005018";
+            WHERE ISBN = "000104799X";
             """
         ))
         connection.commit()
         result = connection.execute(text(
             """
-            SELECT * FROM Books WHERE ISBN = "0002005018";
+            SELECT * FROM Books WHERE ISBN = "000104799X";
             """
         ))
         print("If 3 returns an inventory greater than 1, then we will first update inventory:")
@@ -155,13 +155,13 @@ def run_sample_sql():
             """
             INSERT INTO BorrowRecord (uid, ISBN, renewable,
             DateBorrowed, DateDue, DateReturned)
-            VALUES (1, "0002005018", 1, "2020-05-01", "2020-05-14", NULL);
+            VALUES (1, "000104799X", 1, "2020-05-01", "2020-05-14", NULL);
             """
         ))
         connection.commit()
         result = connection.execute(text(
             """
-            SELECT * FROM BorrowRecord Where ISBN = "0002005018";
+            SELECT * FROM BorrowRecord Where ISBN = "000104799X";
             """
         ))
         print("Insert into BookRecord table where:")
@@ -253,7 +253,7 @@ def run_sample_sql():
         result = connection.execute(text(
             """
             SELECT DateDue FROM BorrowRecord
-            WHERE ISBN = "0002005018";
+            WHERE ISBN = "000104799X";
             """ 
         ))
         print("check if the return date of the book is already after the expected duedate:")
@@ -265,14 +265,14 @@ def run_sample_sql():
         result = connection.execute(text(
             """
             UPDATE BorrowRecord SET DateReturned = "2020-05-10"
-            WHERE uid = 1 AND ISBN = "0002005018";
+            WHERE uid = 1 AND ISBN = "000104799X";
             """ 
         ))
         connection.commit()
         result = connection.execute(text(
             """
             SELECT * FROM BorrowRecord
-            WHERE ISBN = "0002005018";
+            WHERE ISBN = "000104799X";
             """ 
         ))
         print("update the return date of that book to be today in the BorrowRecord table.:")
@@ -331,13 +331,13 @@ def run_sample_sql():
         result = connection.execute(text(
             """
             INSERT INTO Users (name, email, phone, password)
-            VALUES ("Tony", "tony@gmail.com", "1234567890", "password");   
+            VALUES ("sample", "sample@gmail.com", "1234567890", "password");   
             """ 
         ))
         connection.commit()
         result = connection.execute(text(
             """ 
-            SELECT * FROM Users WHERE name = 'Tony';   
+            SELECT * FROM Users WHERE name = 'sample';   
             """ 
         ))
         print("Registration:")
