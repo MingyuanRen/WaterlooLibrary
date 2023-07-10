@@ -11,7 +11,7 @@ from sqlalchemy import text, select
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost/library'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -34,7 +34,7 @@ def register():
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
     with db.engine.connect() as connection:
-        result = connection.execute(text("INSERT INTO Users (name, email, phone, password) VALUES (%s, %s, %s, %s)"),
+        result = connection.execute("INSERT INTO Users (name, email, phone, password) VALUES (%s, %s, %s, %s)",
                 (data['name'], data['email'], data['phone'], hashed_password))
         
     return jsonify({'message': 'New user created!'})
@@ -60,29 +60,30 @@ def getAccountInfo():
     return jsonify(userInfo)
 
 
-
 @app.route('/api/userinfo/bookstatus', methods=['POST'])
 def getBooks():
     data = request.get_json()
-    if "email" not in data:
-        return make_response(jsonify({'error': 'No Email is passed in from body'}), 401) 
+    print(data)
+    if "uid" not in data:
+        return make_response(jsonify({'error': 'No Uid is passed in from body'}), 401)
 
     booksData = []
     try:
-        statement = text("SELECT title, author, DateBorrowed, DateDue FROM BorrowRecord r LEFT JOIN" + \
-                " Books b ON r.ISBN = b.ISBN LEFT JOIN Users u ON u.uid = r.uid  WHERE email = :email AND DateReturned IS NULL")
+        statement = "SELECT title, author, DateBorrowed, DateDue FROM BorrowRecord r LEFT JOIN Books b ON r.ISBN = b.ISBN LEFT JOIN Users u ON u.uid = r.uid  WHERE u.uid = %s AND DateReturned IS NULL"
         with db.engine.connect() as connection:
-            result = connection.execute(statement, {'email': data["email"] }).fetchall()
+            result = connection.execute(statement, (data["uid"],)).fetchall()
             print("hello world")
             for record in result:
                 booksData.append(dict(record._mapping))
             print(booksData)
-            if not booksData: raise Exception()
-    
+            if not booksData:
+                raise Exception()
+
     except Exception as e:
         print(e)
-    
+
     return jsonify(booksData)
+
 ##############################################################################################
 
 @app.route('/login', methods=['POST'])
@@ -90,7 +91,7 @@ def login():
     data = request.get_json()
 
     with db.engine.connect() as connection:
-        result = connection.execute(text("SELECT * FROM Users WHERE email = %s"), (data['email'], ))
+        result = connection.execute("SELECT * FROM Users WHERE email = %s", (data['email'], ))
         user = result.fetchone()
 
         if not user:
@@ -100,14 +101,14 @@ def login():
             return make_response(jsonify({'error': 'Invalid password'}), 401)
 
         # Check if the user is an administrator
-        admin_result = connection.execute(text("SELECT * FROM Administrators WHERE uid = :uid"), {'uid': user['uid']})
-        admin = admin_result.fetchone()
+        # admin_result = connection.execute("SELECT * FROM Administrators WHERE uid = :uid", {'uid': user['uid']})
+        # admin = admin_result.fetchone()
 
-        # If the user is an admin, return an additional attribute in the response
-        if admin:
-            return jsonify({'message': 'Login successful!', 'is_admin': True})
-        else:
-            return jsonify({'message': 'Login successful!', 'is_admin': False})
+        # # If the user is an admin, return an additional attribute in the response
+        # if admin:
+        #     return jsonify({'message': 'Login successful!', 'is_admin': True})
+        # else:
+        return jsonify({'message': 'Login successful!', 'is_admin': False})
 
 # Get user info by email
 @app.route('/user', methods=['GET'])
@@ -115,14 +116,14 @@ def get_user():
     email = request.args.get('email')
     
     with db.engine.connect() as connection:
-        result = connection.execute(text("SELECT name, email, phone FROM Users WHERE email = :email"), {'email': email})
+        result = connection.execute(text("SELECT name, email, phone, uid FROM Users WHERE email = :email"), {'email': email})
 
     user = result.fetchone()
 
     if user is None:
         return jsonify({'error': 'User not found'}), 404
 
-    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2]})
+    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2], 'uid': user[3]})
 
 
 # Book module
@@ -131,7 +132,7 @@ def add_book():
     data = request.get_json()
 
     with db.engine.connect() as connection:
-        result = connection.execute(text("INSERT INTO Books (ISBN, title, author, year_of_publication, publisher, genre, inventory, price) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"),
+        result = connection.execute("INSERT INTO Books (ISBN, title, author, year_of_publication, publisher, genre, inventory, price) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                 (data['isbn'], data['title'], data['author'], data['year_of_publication'], data['publisher'], data['genre'], data['inventory'], data['price']))
 
     return jsonify({'message': 'New book added!'})

@@ -1,89 +1,75 @@
-import React from 'react';
-import { Container, Button, Row, Col } from 'react-bootstrap'
-import { useSelector, useDispatch  } from 'react-redux';
-import { useEffect } from 'react';
-import { getBooksRecords, reset } from '../../states/account/accountSlice'
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getBooksRecords, reset, accountInfo } from '../../states/account/accountSlice';
 
-const BookRecords = () => {
-  const { bookRecords, isLoading, isSuccess} = useSelector(state => state.account)
-  const dispatch = useDispatch()
-  
+const BookRecords = ({ user }) => {
+  const dispatch = useDispatch();
+  const { bookRecords, isLoading, isSuccess } = useSelector((state) => state.account);
   let counter = 1;
-  // console.log(bookRecords)
-  // console.log(isLoading)
-  // console.log(isSuccess)
-
-  localStorage.setItem('userEmail', 'lucas@gmail.com')
-  const userEmail = localStorage.getItem('userEmail')
-  console.log(userEmail)
 
   useEffect(() => {
-    return () => {
-      // console.log(isSuccess);
-      if (isSuccess) {
-        dispatch(reset())
-      }
+    if (user && user.email) {
+      dispatch(accountInfo(user.email));
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('uid', user.uid);
+      dispatch(getBooksRecords(user.uid));
     }
-  }, [dispatch, isSuccess])
+  }, [dispatch, user]);
 
-  
   useEffect(() => {
-    if (userEmail) {
-      dispatch(getBooksRecords(userEmail))
+    if (isSuccess) {
+      dispatch(reset());
     }
+  }, [dispatch, isSuccess]);
+
+  if (!user) {
+    return <div>Loading user data...</div>;
   }
-  , [dispatch, userEmail])
-  
+
   if (isLoading) {
-    return (
-      <>
-       isLoading now
-      </>
-    )
+    return <div>Loading now...</div>;
   }
+  console.log("bookRecords", bookRecords);
   return (
     <div className="text-center">
-    <br></br>
-      <h2>
-        Unreturned Books
-      </h2>
-      <br></br>
-      <br></br>
-      <table class="table table-hover w-full text-sm text-left" style={{ "width": "100vw", "max-width": "100%"}}>
+      <br />
+      <h2>Unreturned Books</h2>
+      <br />
+      <br />
+      <table className="table table-hover w-full text-sm text-left" style={{ width: "100vw", maxWidth: "100%" }}>
         <thead>
-            <tr>
+          <tr>
             <th scope="col">#</th>
             <th scope="col">Title</th>
             <th scope="col">Author</th>
             <th scope="col">Date Of Borrow</th>
             <th scope="col">Due Date</th>
-            </tr>
+          </tr>
         </thead>
         <tbody>
-    {
-      bookRecords.map((book) => (
-        <>
-        <tr>
-            <th scope="row">{counter++}</th>
-            <td>{book.author}</td>
-            <td>{book.title}</td>
-            <td>{new Date(book.DateBorrowed).toLocaleDateString('en-US', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-            })}</td>
-            <td>{new Date(book.DateDue).toLocaleDateString('en-US', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-            })}</td>
-        </tr>   
-        </>
-        
-      ))
-    }
-    </tbody>
-    </table>
+          {bookRecords && bookRecords.length > 0 && bookRecords.map((book) => (
+            <tr key={book.id}>
+              <th scope="row">{counter++}</th>
+              <td>{book.title}</td>
+              <td>{book.author}</td>
+              <td>
+                {new Date(book.DateBorrowed).toLocaleDateString('en-US', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                })}
+              </td>
+              <td>
+                {new Date(book.DateDue).toLocaleDateString('en-US', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                })}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

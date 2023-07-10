@@ -1,20 +1,24 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap'
-import { useState } from 'react';
 import MemberPage from './MemberPage';
 import UserProfile from './UserProfile';
 import BookRecords from './BookRecords';
-
+import { useSelector } from 'react-redux';
 import "./UserHome.css"
 
-const UserHome = ({ username }) => {
+const UserHome = () => {
+  const location = useLocation();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Get user from location state and set it to state
+    setUser(location.state.user);
+  }, [location]);
+
   const submitHandler = () => {}
 
-  const name = "Andrew"
-  const email = "andrew@gmail.com"
-  const password = "Not showns"
-  const confirmPassword = ""
+  const userRedux = useSelector(state => state.user);
 
   const [displayProfile, setDisplayProfile ] = useState(false)
   const [displayRecords, setDisplayRecords ] = useState(false)
@@ -53,11 +57,7 @@ const UserHome = ({ username }) => {
             <Col>
                 <ul>
                 <Row>
-                    <li><a className="nametag"><h3>Welcome {name}</h3></a></li>
-                    {/* <li><a class="active" href="#news">User Profile</a></li>
-                    <li><a href="#contact">Books Record</a></li>
-                    <li><a href="#about">Membership</a></li>
-                    <li><a href="#about">About</a></li> */}
+                    <li><a className="nametag"><h3>Welcome {user ? user.name : 'Guest'}</h3></a></li>
                 <Button variant="secondary" onClick={clickProfileHandler}>User Profile</Button>
               </Row>
               <Row>
@@ -72,17 +72,15 @@ const UserHome = ({ username }) => {
         <Col md="6" className='content-column'>
           {
             !displayMembership && !displayProfile && !displayRecords &&
-            <UserProfile />
+            <UserProfile user={user} />
           }
         {displayMembership && <MemberPage />}
-        {displayProfile && <UserProfile />}
-        {displayRecords && <BookRecords />}
+        {displayProfile && <UserProfile user={user} />}
+        {displayRecords && <BookRecords user={user} />}
         </Col>
       </Row>
       {/* </div> */}
     </Container>
-
-
   );
 };
 
