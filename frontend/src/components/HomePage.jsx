@@ -3,21 +3,21 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import './HomePage.css';
+import styles from './HomePage.module.css';
 
 export const HomePage = () => {
   return (
-    <Container className="custom-container text-center">
+    <Container className={styles.customContainer + " text-center"}>
       <Row className="justify-content-md-center">
         <Col md="auto">
-          <h1 className="title-text">Welcome to WaterlooLibrary!</h1>
-          <p className="lead-text">CS 348 Project</p>
+          <h1 className={styles.titleText}>Welcome to WaterlooLibrary!</h1>
+          <p className={styles.leadText}>CS 348 Project</p>
         </Col>
       </Row>
       <Row className="justify-content-md-center mt-3">
         <Col md="auto">
-          <Link className="btn btn-primary btn-lg custom-button" to="/register">Register</Link>
-          <Link className="btn btn-success btn-lg custom-button" to="/login">Login</Link>
+          <Link className={styles.customButton + " btn btn-primary btn-lg"} to="/register">Register</Link>
+          <Link className={styles.customButton + " btn btn-success btn-lg"} to="/login">Login</Link>
         </Col>
       </Row>
     </Container>
