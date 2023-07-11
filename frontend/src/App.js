@@ -6,6 +6,8 @@ import { Home } from './components/Home';
 import { HomePage } from './components/HomePage'; 
 import { AdminHome } from './components/AdminHome';
 import { SearchPage } from './components/SearchPage';
+import { BookResults } from './components/BookResults';
+import { BookDetails } from './components/BookDetails';
 import React, { useState } from 'react';
 import { UserContext } from './UserContext';
 
@@ -22,6 +24,8 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/admin-home" element={<AdminHome />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/book-results" element={<BookResults />} />
+          <Route path="/books/:isbn" element={<BookDetails />} />
           {/* Add the following route */}
           <Route path="/" element={<Navigate to="/homepage" />} />
         </Routes>
