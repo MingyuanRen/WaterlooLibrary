@@ -25,7 +25,7 @@ export const Login = () => {
       if (res.data.message === 'Login successful!') {
         alert('Login successful!');
         
-        const userDetails = await axios.post('/user', {email: data['email']});
+        const userDetails = await axios.get(`http://localhost:8000/user?email=${data.email}`);
         console.log("user:", userDetails.data);
         dispatch(setUser(userDetails.data));
 
