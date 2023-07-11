@@ -200,35 +200,35 @@ All the frontend related implementation files can be found under WaterlooLibrary
 All the backend related implementation files can be found under WaterlooLibrary/app.py.(the backend main file)
 
 ### Routes
-  <Route path="/login" element={<Login />} />
+    <Route path="/login" element={<Login />} />
 
-  <Route path="/register" element={<Register />} />
+    <Route path="/register" element={<Register />} />
 
-  <Route path="/homepage" element={<HomePage />} />
+    <Route path="/homepage" element={<HomePage />} />
 
-  <Route path="/admin/addBook" element={<AddBook />} />
+    <Route path="/admin/addBook" element={<AddBook />} />
 
-  <Route path="/admin/return" element={<Return />} />
+    <Route path="/admin/return" element={<Return />} />
 
-  <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
+    <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
 
-  <Route path="/home" element={<Home />} />
+    <Route path="/home" element={<Home />} />
 
-  <Route path="/admin-home" element={<AdminHome />} />
+    <Route path="/admin-home" element={<AdminHome />} />
 
-  <Route path="/search" element={<SearchPage />} />
+    <Route path="/search" element={<SearchPage />} />
 
-  <Route path="/book-results" element={<BookResults />} />
+    <Route path="/book-results" element={<BookResults />} />
 
-  <Route path="/books/:isbn" element={<BookDetails />} />
+    <Route path="/books/:isbn" element={<BookDetails />} />
 
-  <Route path="/user-home" element={<UserHome />} />
+    <Route path="/user-home" element={<UserHome />} />
 
-  <Route path="/user-profile" element={<UserProfile />} />
+    <Route path="/user-profile" element={<UserProfile />} />
 
-  <Route path="/bookrecords" element={<BookRecords />} />
-  
-  <Route path="/" element={<Navigate to="/homepage" />} />
+    <Route path="/bookrecords" element={<BookRecords />} />
+    
+    <Route path="/" element={<Navigate to="/homepage" />} />
 
 ### Feature Pictures
 1. MainPage
