@@ -1,0 +1,29 @@
+.customContainer {
+    max-width: 1400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.titleText {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    font-size: 100px;
+    font-weight: 700;
+}
+
+.leadText {
+    font-family: 'Arial', sans-serif;
+    color: #666;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.customButton {
+    margin: 10px;
+    transition: all 0.3s ease;
+}
+
+.customButton:hover {
+    transform: scale(1.1);
+}
