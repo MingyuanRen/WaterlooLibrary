@@ -11,7 +11,7 @@ from sqlalchemy import text
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -86,29 +86,27 @@ def add_book():
 
 @app.route('/books/search', methods=['GET'])
 def search_book():
-    search_params = request.args
-
-    if not search_params:
-        return jsonify({'message': 'You need to provide at least one search parameter'}), 400
+    search_value = request.args.get('value')
+    if not search_value:
+        return jsonify({'message': 'You need to provide a search value'}), 400
 
     valid_search_params = ['title', 'author', 'isbn', 'genre']
     sql_query = "SELECT * FROM Books WHERE "
-    sql_values = []
 
-    for param in search_params:
-        if param not in valid_search_params:
-            return jsonify({'message': f'Invalid search parameter: {param}. Must be one of {valid_search_params}'}), 400
+    for param in valid_search_params:
 
-        sql_query += f"LOWER({param}) LIKE LOWER(%s) AND "
-        sql_values.append("%" + search_params[param] + "%")
+        sql_query += f"LOWER({param}) LIKE LOWER(" + "'%" + search_value + "%'" + ") OR "
 
-    # Remove the trailing 'AND ' from the query
-    sql_query = sql_query[:-4]
+    # Remove the trailing 'OR ' from the query
+    sql_query = sql_query[:-3]
 
     with db.engine.connect() as connection:
-        result = connection.execute(sql_query, tuple(sql_values))
-        books = [dict(row) for row in result.fetchall()]
-
+        result = connection.execute(text(sql_query))
+        #result = connection.execute(text(sql_query), tuple(sql_values))
+        columns = ["isbn", "title", "author", "year_of_publication",
+                   "publisher", "genre", "inventory", "price"]
+        books = [dict(zip(columns, row)) for row in result.fetchall()]
+        print(books)
     if not books:
         return jsonify({'message': 'No books found'}), 404
 
@@ -128,7 +126,8 @@ def borrow_book():
     with db.engine.connect() as connection:
         # Check if the book is available
         book = connection.execute(text("SELECT * FROM Books WHERE ISBN = :isbn"), {"isbn": isbn}).fetchone()
-        if not book or book['inventory'] <= 0:
+        inventory = 6
+        if not book or book[inventory] <= 0:
             return jsonify({'message': 'This book is not available'}), 400
 
         # Decrease the book inventory
@@ -150,8 +149,46 @@ def borrow_book():
             INSERT INTO BorrowRecord (uid, ISBN, renewable, DateBorrowed, DateDue, DateReturned) 
             VALUES (:uid, :ISBN, :renewable, :DateBorrowed, :DateDue, :DateReturned)
         """), borrow_record)
-
     return jsonify({'message': 'Book borrowed successfully'})
+
+@app.route('/books/reserve', methods=['POST'])
+def reserve_book():
+    data = request.get_json()
+
+    if not data or 'uid' not in data or 'isbn' not in data:
+        return jsonify({'message': 'You need to provide both user ID (uid) and ISBN of the book'}), 400
+
+    uid = data['uid']
+    isbn = data['isbn']
+
+    with db.engine.connect() as connection:
+        # Check if the book is available
+        book = connection.execute(text("SELECT * FROM Books WHERE ISBN = :isbn"), {"isbn": isbn}).fetchone()
+        inventory = 6
+        if not book or book[6] <= 0:
+            return jsonify({'message': 'This book is not available'}), 400
+        
+        # Check if user has reserved books < 5
+        reserved = connection.execute(text("SELECT count(*) FROM Reservation WHERE uid = :uid"), {"uid": uid}).fetchone()
+        if reserved and reserved[0] == 5:
+            return jsonify({'message': 'You have reached the limit for reservation'}), 400
+
+        # Record the borrowing operation
+        DateBorrowed = datetime.now()
+        ExpireDate = DateBorrowed + timedelta(days=5)  # Assuming the book is due in two weeks
+        reservation_record = {
+            "uid": uid,
+            "ISBN": isbn,
+            "DateReserved": DateBorrowed,
+            "ExpireDate": ExpireDate,
+        }
+
+        connection.execute(text("""
+            INSERT INTO Reservation (uid, ISBN, DateReserved, ExpireDate) 
+            VALUES (:uid, :ISBN, :DateReserved, :ExpireDate)
+        """), reservation_record)
+
+    return jsonify({'message': 'Book reserved successfully'})
 
 @app.route('/books/return', methods=['POST'])
 def return_book():
