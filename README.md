@@ -1,6 +1,17 @@
 # Waterloo Library Management System
 
 This project is a database-driven application for managing a library. It uses MySQL as the database, Flask as the back-end server, and React for the front-end user interface.
+The Library Management Application is a robust and user-friendly solution designed to streamline the management of libraries. Leveraging the power of MySQL, Flask, and React, this application offers a comprehensive set of features for both users and administrators. Users can easily register and log in to access their personalized user page, where they can view their information, track borrow records, and conveniently search for, borrow, and reserve books. Administrators have access to an exclusive admin page, allowing them to efficiently add new books to the library, handle book returns, and conveniently view and edit user information. With its intuitive interface and powerful technology stack, the Library Management Application provides a seamless and efficient experience for managing libraries of any size.
+
+## Technologies Used
+
+The application leverages the following technologies:
+
+MySQL: A robust and reliable database management system, used to store and organize library data.
+
+Flask: A powerful and flexible Python-based web framework, chosen as the back-end server for its ease of use and extensibility.
+
+React: A popular JavaScript library for building user interfaces, enabling the creation of a dynamic and responsive front-end experience.
 
 ## Prerequisites
 
@@ -175,7 +186,37 @@ Fine Management (To be Updated): A page to track these, issue reminders, and pro
 Reservations (To be Updated): A page allowing users to reserve books that are currently borrowed by others.
 
 ## Current Features
+The Library Management Application offers the following features:
 
+User Registration and Login: Users can easily create an account and log in to access the application.
+
+User Page: Users have their own dedicated page where they can view their personal information, check their borrow records, and manage their account.
+
+Book Page: Users can search for books, borrow books, and reserve books through the intuitive book page.
+
+Admin Page: Administrators have access to an exclusive admin page where they can add new books to the library, handle book returns, and view and edit user information.
+
+All the frontend related implementation files can be found under WaterlooLibrary/frontend/src.
+All the backend related implementation files can be found under WaterlooLibrary/app.py.(the backend main file)
+
+### Routes
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
+  <Route path="/homepage" element={<HomePage />} />
+  <Route path="/admin/addBook" element={<AddBook />} />
+  <Route path="/admin/return" element={<Return />} />
+  <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
+  <Route path="/home" element={<Home />} />
+  <Route path="/admin-home" element={<AdminHome />} />
+  <Route path="/search" element={<SearchPage />} />
+  <Route path="/book-results" element={<BookResults />} />
+  <Route path="/books/:isbn" element={<BookDetails />} />
+  <Route path="/user-home" element={<UserHome />} />
+  <Route path="/user-profile" element={<UserProfile />} />
+  <Route path="/bookrecords" element={<BookRecords />} />
+  <Route path="/" element={<Navigate to="/homepage" />} />
+
+### Feature Pictures
 1. MainPage
 ![MainPage](assets/mainpage.png "MainPage")
 
