@@ -40,7 +40,7 @@ export const Register = () => {
       <h1 className="header">Register</h1>
       <form className="register-form" onSubmit={register}>
         <input type='text' name='name' placeholder='Name' className="input-field" onChange={handleChange} required />
-        <input type='email' name='email' placeholder='Email' className="input-field" onChange={handleChange} required />
+        <input name='email' placeholder='Email' className="input-field" onChange={handleChange} required />
         <input type='tel' name='phone' placeholder='Phone' className="input-field" onChange={handleChange} required />
         <input type='password' name='password' placeholder='Password' className="input-field" onChange={handleChange} required />
         <button type='submit' className="submit-btn">Register</button>

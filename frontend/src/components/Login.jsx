@@ -51,7 +51,7 @@ export const Login = () => {
       <h1 className="header">Login</h1>
       <form className="login-form" onSubmit={login}>
         <input 
-          type="email"
+          // type="email"
           name="email"
           placeholder="Email"
           className="input-field"

@@ -36,7 +36,7 @@ const BookRecords = ({ user }) => {
       <h2>Unreturned Books</h2>
       <br />
       <br />
-      <table className="table table-hover w-full text-sm text-left" style={{ width: "100vw", maxWidth: "100%" }}>
+      <table className="table table-hover w-full text-sm text-left" style={{ width: "50vw", maxWidth: "100%" }}>
         <thead>
           <tr>
             <th scope="col">#</th>
