@@ -179,39 +179,34 @@ Reservations (To be Updated): A page allowing users to reserve books that are cu
 1. MainPage
 ![MainPage](assets/mainpage.png "MainPage")
 
-1. Register User
-Once you run the Flask Application, you can test it with PostMan by sending post request to http://localhost:8000/register and using json object as body:
-```bash
-    {
-        "name": "John Doe",
-        "email": "john@example.com",
-        "phone": "1234567890",
-        "password": "password123"
-    }
-```
+### User
 
-You should be able to see this, if the user has been successfully registered:
-```bash
-    {
-        "message": "New user created!"
-    }
-```
+2. Register User
+![registerpage](assets/registerpage.png "Register Page")
 
-2. Login User
-Sending post request to http://localhost:8000/login and using json object as body:
-```bash
-    {
-        "email": "john@example.com",
-        "password": "password123"
-    }
-```
-You should be able to see this, if the user successfully login:
-```bash
-    {
-        "message": "Login successful!"
-    }
-```
-3. Add Books
+3. Login User
+![LoginPage](assets/LoginPage.png "Login Page")
+
+3. User Page(After Register or Login)
+![UserInfo](assets/UserInfo.png "User Info")
+which also contains User Profile page
+
+4. User's Borrow Records
+![BorrowRecordsExample](assets/BorrowRecordsExample.jpg "Borrow Records")
+
+### Book
+5. Search Books
+![bookSearchPage](assets/bookSearchPage.jpg "Book Search Page")
+
+6. Book Search Result(In which Page You can Select your ideal Books)
+![bookSearchResult](assets/bookSearchResult.jpg "Book Search Result")
+
+7. Borrow and Reserve Books
+![Borrow Book](assets/borrowBook.jpg "Borrow Book")
+
+![Reserve Book](assets/reserveBook.jpg "Reserve Book")
+
+
 Sending post request to http://localhost:8000/books and using json object as body:
 ```bash
     {
