@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  margin:auto;
+  padding: 0;
+}
+
+body {
+  background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("./old-book-open-dark-wood-background.jpg");
+  background-size:cover;
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.search-title {
+  font-size: 60px;
+  margin-bottom: 25px;
+  font-family: Impact, fantasy;
+}
+
+
+.search-container {
+    padding: 20px;
+    font-size: 18px;
+    float: left;
+    width: 80%;
+  }
+
+  .search-container>form {
+    width: 1000px;
+  }
+  
+
+  .search-input {
+    border:2px solid gray;
+    outline:none;
+    font:14px/30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 80%;
+    border-radius: 5px;
+  }
+
+  .search-button:hover {
+    background-color: #0b5ed7;
+    color: whitesmoke;
+  }
+  
+  .search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 10px 12px 10px;
+    cursor: pointer;
+    font:14px/34px;
+  }
+  
+  .search-results {
+    list-style: none;
+    padding: 0;
+    width: max-content;
+  }
+  
+  .search-results>tr>td {
+    padding: 5px;
+  }
+  
+  .search-results li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .search-results li a:hover {
+    text-decoration: underline;
+  }
+  

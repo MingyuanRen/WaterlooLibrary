@@ -5,6 +5,9 @@ import { Register } from './components/Register';
 import { Home } from './components/Home';
 import { HomePage } from './components/HomePage'; 
 import { AdminHome } from './components/AdminHome';
+import { SearchPage } from './components/SearchPage';
+import { BookResults } from './components/BookResults';
+import { BookDetails } from './components/BookDetails';
 import React, { useState } from 'react';
 import { UserContext } from './UserContext';
 import AddBook  from './Admin_components/AddBook';
@@ -30,6 +33,9 @@ const App = () => {
           <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin-home" element={<AdminHome />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/book-results" element={<BookResults />} />
+          <Route path="/books/:isbn" element={<BookDetails />} />
           <Route path="/user-home" element={<UserHome />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/bookrecords" element={<BookRecords />} />
