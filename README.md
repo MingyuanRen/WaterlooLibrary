@@ -135,30 +135,49 @@ CREATE TABLE IF NOT EXISTS Redemption(
   SELECT * FROM users;
 ```
 
-## How to Run Flask Server
-after you set up the config for Flask, MySQL and done creating your local database,
+## How to Run the Application
+after you set up the config for Flask, React, MySQL and done creating your local database,
 Run the Flask server:
 
 ```bash
   flask run --port 8000
 ```
+
+Run the React Frontend:
+
+```bash
+  cd frontend
+  npm start
+```
+
 ## Current Design of the GUI (To be Updated)
+MainPage: The Main Page for our WaterlooLibrary Application
+
 Register and Login Page: A secured register and login system for users.
 
-User Info Page: A page showing the infomation of specific user including personal info, borrow record, reservation record and redemption(for MemberUser).
+User Page: A page showing the infomation of specific user including personal info, borrow record, reservation record and redemption(for MemberUser).
 
-Search Book Page: A page showing a list/table of books with details (like ISBN, title, author, year of publication, publisher, genre, inventory, price)
+Search Book Page: A page showing a list/table of books with details (like ISBN, title, author, year of publication, publisher, inventory, price)
 Search bar to filter the list by different criteria (like title, author, ISBN).
+
+Admin Page: A page for Administrators to manage user info, books inventory(add or return).
 
 Issue and Return Management: A system for checking books in and out, and updating the status of the books.
 
-Redemption Page: A page for Redemption.
+Adding Books Page: A page for Administrators to add books.
 
-Fine Management: A page to track these, issue reminders, and process payments.
+Updating User Info Page: A page for updating user's Info like email, phone number(only accessible for admin).
 
-Reservations: A page allowing users to reserve books that are currently borrowed by others.
+Redemption Page (To be Updated): A page for Redemption.
 
-## Current Supporting Features
+Fine Management (To be Updated): A page to track these, issue reminders, and process payments.
+
+Reservations (To be Updated): A page allowing users to reserve books that are currently borrowed by others.
+
+## Current Features
+
+1. MainPage
+![MainPage](assets/mainpage.png "MainPage")
 
 1. Register User
 Once you run the Flask Application, you can test it with PostMan by sending post request to http://localhost:8000/register and using json object as body:
