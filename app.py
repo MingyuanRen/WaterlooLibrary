@@ -7,15 +7,13 @@ from sqlalchemy.sql import text
 from flask import abort
 from flask import make_response
 from flask_cors import CORS
-from sqlalchemy import text
+from sqlalchemy import text, select
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:458i*488P@localhost:3306/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
-
 # user module
 @app.route('/register', methods=['POST'])
 def register():
@@ -28,8 +26,52 @@ def register():
         
     return jsonify({'message': 'New user created!'})
 
+##############################################################################################
+@app.route('/api/userinfo/account', methods=['POST'])
+def getAccountInfo():
+    data = request.get_json()
+    if "email" not in data:
+        return make_response(jsonify({'error': 'No Email is passed in from body'}), 401)
+    
+    userInfo = None
+    try:
+        statement = select(User).where(User.email == data["email"])
+        with db.engine.connect() as connection:
+            result = connection.execute(statement).fetchone()
+            userInfo = dict(result._mapping)
+            if userInfo == None: raise Exception()
+    
+    except:
+        return make_response(jsonify({'error': 'User Not found'}), 401)
+    
+    return jsonify(userInfo)
 
 
+@app.route('/api/userinfo/bookstatus', methods=['POST'])
+def getBooks():
+    data = request.get_json()
+    print(data)
+    if "uid" not in data:
+        return make_response(jsonify({'error': 'No Uid is passed in from body'}), 401)
+
+    booksData = []
+    try:
+        statement = "SELECT title, author, DateBorrowed, DateDue FROM BorrowRecord r LEFT JOIN Books b ON r.ISBN = b.ISBN LEFT JOIN Users u ON u.uid = r.uid  WHERE u.uid = %s AND DateReturned IS NULL"
+        with db.engine.connect() as connection:
+            result = connection.execute(statement, (data["uid"],)).fetchall()
+            print("hello world")
+            for record in result:
+                booksData.append(dict(record._mapping))
+            print(booksData)
+            if not booksData:
+                raise Exception()
+
+    except Exception as e:
+        print(e)
+
+    return jsonify(booksData)
+
+##############################################################################################
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -65,14 +107,14 @@ def get_user():
     email = request.get_json().get('email')
     # print(email)
     with db.engine.connect() as connection:
-        result = connection.execute(text("SELECT name, email, phone FROM Users WHERE email = '{email}'".format(email=email)))
-    
+        result = connection.execute(text("SELECT name, email, phone, uid FROM Users WHERE email = :email"), {'email': email})
+
     user = result.fetchone()
 
     if user is None:
         return jsonify({'error': 'User not found'}), 404
 
-    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2]})
+    return jsonify({'name': user[0], 'email': user[1], 'phone': user[2], 'uid': user[3]})
 
 
 # Book module
@@ -327,6 +369,7 @@ def updateUser():
 
             connection.commit()
     return jsonify({'message': 'User info updated successfully'})
+
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)

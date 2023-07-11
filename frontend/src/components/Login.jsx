@@ -25,15 +25,20 @@ export const Login = () => {
       if (res.data.message === 'Login successful!') {
         alert('Login successful!');
         
-        const userDetails = await axios.post('/user', {email: data['email']});
+        const userDetails = await axios.get(`http://localhost:8000/user?email=${data.email}`);
         console.log("user:", userDetails.data);
         dispatch(setUser(userDetails.data));
 
         // Check if the user is an administrator and navigate accordingly
+        // if (res.data.is_admin) {
+        //   navigate('/admin-home'); // redirect to admin home page
+        // } else {
+        //   navigate('/home'); // redirect to user home page
+        // }
         if (res.data.is_admin) {
-          navigate('/admin-home'); // redirect to admin home page
+          navigate('/admin-home', { state: { user: userDetails.data } }); // redirect to admin home page
         } else {
-          navigate('/home'); // redirect to user home page
+          navigate('/user-home', { state: { user: userDetails.data } }); // redirect to user home page
         }
       }
     } catch (error) {
