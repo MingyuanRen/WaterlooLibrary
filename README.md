@@ -238,4 +238,4 @@ The major table that is going to use a lot real data is “Books”. As a librar
 
 Our “Books” tables contains “price” and “inventory”, which are not included in the real database, and the real database contains “img-url” which is not used by our database. Thus, we take “ISBN”, “title”, “author”, “year-of-publication” and “publisher” from the database for each book, and we use script to automatically generate “inventory” and “price” for that book. Finally, we combine the data and insert it into the database.
 
-More details about implementation can be found under update_tables folder, create_tables.py and update_tables.py.
+More details about implementation can be found under update_tables folder(including both sample and production), create_tables.py and update_tables.py.
