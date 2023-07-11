@@ -101,4 +101,25 @@ SELECT title, author, DateBorrowed, DateDue, DateReturned
 FROM Users NATURAL JOIN borrowrecord NATURAL JOIN Books
 WHERE email = "lucas@gmail.com" AND password = "12345";
 
+-- Administrator related
+--- Adding Book
+INSERT INTO Books (ISBN, title, author, year_of_publication, publisher, inventory, price)
+SELECT "0001048473", "Nothing Can Be Better", "Barns &amp; Budd", DATE "1996-01-01", "Atlantic", 10, 20.50
+WHERE NOT EXISTS (SELECT * FROM Books WHERE ISBN = '0001048473');
 
+--- ViewUserInfo (the same as login, as this time it is the administrator viewing a user's data
+--- instead of the user viewing his/her data)
+
+--- Update User's info (uid is auto generated, so it cannot be changed)
+UPDATE Users
+SET name = 'lucas', email = 'lucas@email.com', phone = '1234567890'
+WHERE uid = 1
+
+--- Update member's info if the user is also a member
+UPDATE MemberUsers
+SET points = 20000, start_date = DATE '2020-09-09', end_date = DATE '2023-10-03'
+WHERE uid = 1
+
+-- Personal Center related
+--- the related queris are viewing user info, membership info, and borrowed record
+--- of a user, which are contained in the previous queries.

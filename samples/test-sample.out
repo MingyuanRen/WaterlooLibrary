@@ -76,3 +76,12 @@ Registration:
 
 Login:
 (1, 'Lucas', 'lucas@gmail.com', '1234567890', '12345')
+
+Adding Book:
+('00000', 'react testing book', 'test', datetime.date(2023, 1, 1), 'react', 101, Decimal('4.99'))
+
+Update User's info (uid is auto generated, so it cannot be changed):
+(1, 'user_name', 'sample@email.com', '1234567890', '12345')
+
+Update member's info if the user is also a member:
+(1, 'user_name', 'sample@email.com', '1234567890', '12345')
