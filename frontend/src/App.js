@@ -10,27 +10,40 @@ import { BookResults } from './components/BookResults';
 import { BookDetails } from './components/BookDetails';
 import React, { useState } from 'react';
 import { UserContext } from './UserContext';
+import AddBook  from './Admin_components/AddBook';
+import Return  from './Admin_components/Return';
+import ViewUserInfo from './Admin_components/ViewUserInfo';
+import UserHome from './components/UserPage/UserHome';
+import UserProfile from './components/UserPage/UserProfile'
+import BookRecords from './components/UserPage/BookRecords'
 
 const App = () => {
   const [user, setUser] = useState(null);
 
   return (
     <Router>
+      {/* <main className="py-3"> */}
       <UserContext.Provider value={{ user, setUser }}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/homepage" element={<HomePage />} />
+          <Route path="/admin/addBook" element={<AddBook />} />
+          <Route path="/admin/return" element={<Return />} />
+          <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin-home" element={<AdminHome />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/book-results" element={<BookResults />} />
           <Route path="/books/:isbn" element={<BookDetails />} />
+          <Route path="/user-home" element={<UserHome />} />
+          <Route path="/user-profile" element={<UserProfile />} />
+          <Route path="/bookrecords" element={<BookRecords />} />
           {/* Add the following route */}
           <Route path="/" element={<Navigate to="/homepage" />} />
         </Routes>
       </UserContext.Provider>
-
+      {/* </main> */}
     </Router>
   );
 };

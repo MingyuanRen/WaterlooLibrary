@@ -1,0 +1,15 @@
+.header {
+    color: #333;
+    font-size: 3rem;
+    margin: 2rem;
+  }
+  
+  .button {
+    margin: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .button:hover {
+    transform: scale(1.1);
+  }
+  
