@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f5f5f5; /* Change the background color of the page */
+}
+
+.header {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 1em;
+}
+
+.bookForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+  max-width: 400px; /* Adjust as per your requirements */
+  background: #fff; /* Change the background color of the form */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.bookForm input,
+.bookForm button {
+  padding: 0.5em;
+  font-size: 1em;
+  width: 100%; 
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.bookForm button {
+  background: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+.bookForm button:hover {
+  background: #0056b3;
+}

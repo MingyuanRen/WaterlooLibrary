@@ -7,6 +7,9 @@ import { HomePage } from './components/HomePage';
 import { AdminHome } from './components/AdminHome';
 import React, { useState } from 'react';
 import { UserContext } from './UserContext';
+import AddBook  from './Admin_components/AddBook';
+import Return  from './Admin_components/Return';
+import ViewUserInfo from './Admin_components/ViewUserInfo';
 import UserHome from './components/UserPage/UserHome';
 import UserProfile from './components/UserPage/UserProfile'
 import BookRecords from './components/UserPage/BookRecords'
@@ -22,6 +25,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/homepage" element={<HomePage />} />
+          <Route path="/admin/addBook" element={<AddBook />} />
+          <Route path="/admin/return" element={<Return />} />
+          <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin-home" element={<AdminHome />} />
           <Route path="/user-home" element={<UserHome />} />
