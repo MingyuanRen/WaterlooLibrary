@@ -151,7 +151,8 @@ after you set up the config for Flask, React, MySQL and done creating your local
 Run the Flask server:
 
 ```bash
-  flask run --port 8000
+  cd app
+  python3 app.py
 ```
 
 Run the React Frontend:
