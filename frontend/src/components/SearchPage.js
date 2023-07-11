@@ -1,46 +1,46 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './SearchPage.css';
+import { useNavigate } from 'react-router-dom';
 
 export const SearchPage = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const navigate = useNavigate();
+    const [value, setSearchQuery] = useState('');
+    //const [searchResults, setSearchResults] = useState([]);
 
     const handleSearch = async (e) => {
         e.preventDefault();
 
         try {
             const response = await axios.get('/books/search', {
-                params: { query: searchQuery },
+                params: { value },
             });
-            setSearchResults(response.data);
+            console.log(response.data.status_code)
+            if (response.data.status_code === 400 || response.data.status_code === 404) {
+                alert(response.data.message)
+            }
+            //setSearchResults(response.data);
+            navigate('/book-results', { state: { results: response.data } })
         } catch (error) {
             alert(error.response.data.error);
         }
     };
 
     return (
-        <div className="search-container">
+        <div className="search">
             <h2 className="search-title">Book Search</h2>
-            <form onSubmit={handleSearch}>
-                <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button className="search-button" type="submit">Search</button>
-            </form>
-
-            <ul className="search-results">
-                {searchResults.map((book) => (
-                    <li key={book.id}>
-                        <Link to={`/books/${book.isbn}`}>{book.title}</Link>
-                    </li>
-                ))}
-            </ul>
+            <div className='search-container'>
+                <form onSubmit={handleSearch}>
+                    <input
+                        className='search-input'
+                        type="text"
+                        value={value}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <button className="search-button" type="submit">Search</button>
+                </form>
+            </div>
         </div>
     );
 }
 
-export default SearchPage;

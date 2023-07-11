@@ -1,0 +1,33 @@
+.book-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .book-details-card {
+    width: 800px;
+    border: 5px solid #ccc;
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  .book-details-card h2 {
+
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .book-details-card p {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .book-details-card button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 10px;
+  }
+  

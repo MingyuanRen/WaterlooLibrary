@@ -1,12 +1,19 @@
 import React from 'react';
 import axios from 'axios';
+import {useLocation} from 'react-router-dom';
+import './BookDetails.css';
 
-export const BookDetails = ({ book }) => {
+export const BookDetails = () => {
+    const location = useLocation()
+
+    let book = location.state.book
+    const user = {"uid": 2}
+
     const handleBorrow = async (e) => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('/books/borrow', { bookId: book.isbn })
+            const res = await axios.post('/books/borrow', { isbn: book.isbn, uid: user.uid })
             if (res.data.message === 'Book borrowed successfully') {
                 alert(res.data.message);
             }
@@ -18,8 +25,9 @@ export const BookDetails = ({ book }) => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('/books/reserve', { bookId: book.isbn })
-            if (res.data.message === 'Book Reserved successfully') {
+            const res = await axios.post('/books/reserve', { isbn: book.isbn, uid: user.uid })
+            alert(res.data.message);
+            if (res.data.message === 'Book reserved successfully') {
                 alert(res.data.message);
             }
         } catch (error) {
