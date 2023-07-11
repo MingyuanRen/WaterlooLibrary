@@ -4,10 +4,10 @@
   padding: 0;
 }
 
-body {
+/* body {
   background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("./old-book-open-dark-wood-background.jpg");
   background-size:cover;
-}
+} */
 
 .search {
   display: flex;
