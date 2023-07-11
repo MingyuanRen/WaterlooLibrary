@@ -281,11 +281,8 @@ Some Features can only be achieved by Administrators(which are users in the Admi
 
 ![Update User Info](assets/adminUserInfoChange.png "Update User Info")
 
-## Sample SQL
--- All the queries in the test-sample.sql are been given using actual examples
-
--- The actuall implementation of the queries in the application includes changes on the actual values 
-
+## Sample and Production SQL
+-- All the queries, input and output for both production and sample db are listed under samples folder, more details can be found under this folde and from the main Report .
 
 ## Generate Production Dataset and Load to Database
 For the real database, we choose the approach that combines import from a real large database, and randomly generated entries by scripts. 
