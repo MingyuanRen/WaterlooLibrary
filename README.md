@@ -229,3 +229,13 @@ Some Features can only be achieved by Administrators(which are users in the Admi
 -- All the queries in the test-sample.sql are been given using actual examples
 
 -- The actuall implementation of the queries in the application includes changes on the actual values 
+
+
+## Generate Production Dataset and Load to Database
+For the real database, we choose the approach that combines import from a real large database, and randomly generated entries by scripts. 
+
+The major table that is going to use a lot real data is “Books”. As a library management system, it is possible to have limited users and borrow records, but the number of books we have has to be enough. Thus, we found a real database for books (https://www.kaggle.com/datasets/saurabhbagchi/books-dataset), and use it as the base database. 
+
+Our “Books” tables contains “price” and “inventory”, which are not included in the real database, and the real database contains “img-url” which is not used by our database. Thus, we take “ISBN”, “title”, “author”, “year-of-publication” and “publisher” from the database for each book, and we use script to automatically generate “inventory” and “price” for that book. Finally, we combine the data and insert it into the database.
+
+More details about implementation can be found under update_tables folder, create_tables.py and update_tables.py.
