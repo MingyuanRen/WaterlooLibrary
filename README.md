@@ -206,72 +206,24 @@ which also contains User Profile page
 
 ![Reserve Book](assets/reserveBook.jpg "Reserve Book")
 
+### Administrator
+Some Features can only be achieved by Administrators(which are users in the Administrator table)
 
-Sending post request to http://localhost:8000/books and using json object as body:
-```bash
-    {
-        "isbn": "978-3-16-148410-0",
-        "title": "The Great Gatsby",
-        "author": "F. Scott Fitzgerald",
-        "year_of_publication": "1925",
-        "publisher": "Charles Scribner's Sons",
-        "genre": "Novel",
-        "inventory": 10,
-        "price": 15.99
-    }
-```
-You should be able to see this, if boos has been successfully added:
-```bash
-    {
-        "message": "New book added!"
-    }
-```
+8. Administrator Page
+![Admin Page](assets/adminpage.jpg "Admin Page")
 
-4. Seach Book
-Sending Get request to http://localhost:8000/books/search?title=Great and using params { "title" : "Great" }
-In this Example, the keyword for title "Great" is used, currently we support ['title', 'author', 'isbn', 'genre'] as keyword(you can use mutiple of these for search)
+9. Add Book
+![Add Book](assets/addBooks.jpeg "Add Book")
 
-You should be able to see all the books with title contains Great
-```bash
-[
-    {
-        "ISBN": "9783161484100",
-        "author": "F. Scott Fitzgerald",
-        "genre": "Novel",
-        "inventory": 10,
-        "price": "15.99",
-        "publisher": "Charles Scribner's Sons",
-        "title": "The Great Gatsby",
-        "year_of_publication": "Thu, 01 Jan 1925 00:00:00 GMT"
-    },
-    {
-        "ISBN": "9783161484110",
-        "author": "F. Scott Fitzgerald",
-        "genre": "Novel",
-        "inventory": 6,
-        "price": "15.99",
-        "publisher": "Charles Scribner's Sons",
-        "title": "The Great Gatsby",
-        "year_of_publication": "Thu, 01 Jan 1925 00:00:00 GMT"
-    }
-]
-```
+10. Return Book
+![Return Book](assets/returnBook.jpeg "Return Book")
 
-5. Borrow Books
-Sending Post request to http://localhost:8000/books/borrow and and using json object as body:
-Suppose you are number 1 user, and you want to borrow The Great Gatsby which has 9783161484110 as isbn
-```bash
-    {
-        "uid": "1",
-        "isbn": "9783161484110"
-    }
-```
-You should be able to see this json object as return if you borrow this book successfully
-```bash
-    {
-        'message': 'Book borrowed successfully'
-    }
-```
+11. View And Edit User Info
+![Get User Info](assets/adminGetUserInfo.png "Get User Info")
+
+![User Info Example](assets/adminUserInfoExample.png "User Info Example")
+
+![Update User Info](assets/adminUserInfoChange.png "Update User Info")
 
 ## Sample SQL
 -- All the queries in the test-sample.sql are been given using actual examples
