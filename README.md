@@ -148,6 +148,15 @@ CREATE TABLE IF NOT EXISTS Redemption(
 
 ## How to Run the Application
 after you set up the config for Flask, React, MySQL and done creating your local database,
+two ways of running the application:
+
+1. Docker-compose up
+```bash
+  docker compose up
+```
+
+2. Run Frontend and Backend Separately: 
+
 Run the Flask server:
 
 ```bash
