@@ -10,10 +10,6 @@ from models import User
 
 CORS(app)
 
-# Rest of your route functions
-# ...
-
-
 # user module
 @app.route('/register', methods=['POST'])
 def register():
