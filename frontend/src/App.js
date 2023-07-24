@@ -16,6 +16,7 @@ import ViewUserInfo from './Admin_components/ViewUserInfo';
 import UserHome from './components/UserPage/UserHome';
 import UserProfile from './components/UserPage/UserProfile'
 import BookRecords from './components/UserPage/BookRecords'
+import RedeemPage from './components/UserPage/RedeemPage'
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/user-home" element={<UserHome />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/bookrecords" element={<BookRecords />} />
+          <Route path="/redeem" element={<RedeemPage />} />
           {/* Add the following route */}
           <Route path="/" element={<Navigate to="/homepage" />} />
         </Routes>

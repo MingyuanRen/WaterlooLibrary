@@ -7,7 +7,7 @@ import MySQLdb._exceptions as db_exception
 
 db = SQLAlchemy()
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:458i*488P@localhost:3306/library'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost:3306/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 

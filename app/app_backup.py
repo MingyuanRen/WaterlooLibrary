@@ -11,7 +11,7 @@ from sqlalchemy import text, select
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zimablue@localhost/library'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

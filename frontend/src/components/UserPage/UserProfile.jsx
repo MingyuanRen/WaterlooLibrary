@@ -22,9 +22,14 @@ const UserProfile = ({ user }) => {
   return (
     <div className="text-center">
       <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
       <h2>
         Personal Information
       </h2>
+      <br></br>
       <br></br>
       <br></br>
         <table className="table">

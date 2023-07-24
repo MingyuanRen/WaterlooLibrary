@@ -19,6 +19,25 @@ const findUserInfo = async (userEmail) => {
   return response.data
 }
 
+const membershipInfo = async (userEmail) => {
+  let response
+  try{
+    console.log("run here")
+    response = await axios.post(API_URL + '/memberinfo', {"email": userEmail})
+    console.log(response.data)
+  } catch(e){
+    console.log(e)
+    throw Error()
+  }
+  console.log("after request", userEmail)
+
+  if (response.data) {
+    localStorage.setItem('membershipInfo', JSON.stringify(response.data))
+  }
+  // console.log(response.data);
+  return response.data
+}
+
 // const getBooksRecords = async(uid) => {
 //   let response
 //   try{
@@ -45,9 +64,45 @@ const getBooksRecords = async(uid) => {
   }
 }
 
+const getGiftsList = async(uid) => {
+  try{
+    const response = await axios.post(API_URL + '/giftlist', {"uid": uid});
+    console.log("gifts after request", response.data);
+    // debug purpose for putting into localStorage
+    localStorage.setItem("gift", response.data)
+    return response.data;
+  } catch(e){
+    console.log(e);
+  }
+}
+
+const redeem = async(uid, item, points, points_need) => {
+  try{
+    console.log("redemm::", uid, item, points, points_need)
+    const body = {
+      "uid": uid, 
+      "item": item, 
+      "points": points, 
+      "points_need": points_need
+    }
+    const response = await axios.post(API_URL + '/giftlist/redeem', body);
+    console.log("redeem...", response.data);
+    // debug purpose for putting into localStorage
+    localStorage.setItem("redeemable", response.data)
+    return response.data.redeemable;
+  } catch(e){
+    console.log("I should see this")
+    console.log(e.message);
+    return false
+  }
+}
+
 const accountService = {
   findUserInfo,
-  getBooksRecords
+  getBooksRecords,
+  membershipInfo,
+  getGiftsList,
+  redeem
 }
 
 export default accountService

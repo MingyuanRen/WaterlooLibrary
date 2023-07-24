@@ -17,9 +17,10 @@ def register():
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
     with db.engine.connect() as connection:
-        result = connection.execute("INSERT INTO Users (name, email, phone, password) VALUES (%s, %s, %s, %s)",
-                                    (data['name'], data['email'], data['phone'], hashed_password))
-        
+        result = connection.execute(text("INSERT INTO Users (name, email, phone, password) VALUES ('{name}', '{email}', '{phone}', '{password}')".format( 
+            name = data['name'], email = data['email'], phone = data['phone'], password = hashed_password)))
+        connection.commit()
+
     return jsonify({'message': 'New user created!'})
 
 @app.route('/api/userinfo/account', methods=['POST'])
@@ -41,6 +42,90 @@ def getAccountInfo():
         return make_response(jsonify({'error': 'User Not found'}), 401)
     
     return jsonify(userInfo)
+
+@app.route('/api/userinfo/memberinfo', methods=['POST'])
+def getMemberInfo():
+    print("Hello world")
+    data = request.get_json()
+    if "email" not in data:
+        return make_response(jsonify({'error': 'No Email is passed in from body'}), 401)
+    
+    memberInfo = None
+    try:
+        statement = text("SELECT * FROM MemberUsers m LEFT JOIN Users u ON m.uid = u.uid WHERE email = :email")
+        with db.engine.connect() as connection:
+            result = connection.execute(statement, { "email": data["email"]}).fetchone()
+            # result = connection.execute(statement)
+            # print("here")
+            memberInfo = dict(result._mapping)
+            # print("memberInfo:", memberInfo)
+            if memberInfo is None:
+                raise Exception()
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'isMember': 'false'}), 200)
+    
+    return jsonify({"isMember": "true", "memberinfo" : memberInfo})
+
+
+@app.route('/api/userinfo/giftlist', methods=['POST'])
+def getGifts():
+    data = request.get_json()
+    print(data)
+
+    giftsData = []
+    try:
+        statement = text("SELECT * FROM Gifts WHERE inventory > 0")
+        with db.engine.connect() as connection:
+            result = connection.execute(statement).fetchall()
+            print("gift here ka")
+            for record in result:
+                giftsData.append(dict(record._mapping))
+            print(giftsData)
+            if not giftsData:
+                raise Exception()
+
+    except Exception as e:
+        print(e)
+
+    return jsonify(giftsData)
+
+@app.route('/api/userinfo/giftlist/redeem', methods=['POST'])
+def redeem():
+    data = request.get_json()
+    print(data)
+
+    if 'uid' not in data or 'points' not in data or 'item' not in data or 'points_need' not in data:
+        return make_response(jsonify({'message': 'No uid is passed from body'}), 401)
+
+    uid = int(data['uid'])
+    points = int(data['points'])
+    item = data['item']
+    points_need = int(data['points_need'])
+
+    try:
+        with db.engine.connect() as connection:
+            # check if user have enough points
+            if points < points_need:
+                return make_response(jsonify({'redeemable': 'false'}), 200)
+            
+            # update inventory
+            connection.execute(text("UPDATE Gifts SET inventory = inventory - 1 WHERE item = :item"), {"item": item})
+
+            # update user points
+            connection.execute(text("UPDATE MemberUsers SET points = :points - :points_need  WHERE uid = :uid"), {"points": points, "points_need": points_need, "uid": uid})
+            
+            # insert redemption records
+            date = datetime.now()
+            connection.execute(text("INSERT INTO Redemption VALUES(:uid, :item, :date)"), {"uid": uid, "item": item, "date": date})
+            connection.commit()
+            print("execute successfully")
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'redeemable': 'false'}), 451)
+    
+    return jsonify({"redeemable": "true"})
+
 
 @app.route('/api/userinfo/bookstatus', methods=['POST'])
 def getBooks():
@@ -71,8 +156,9 @@ def login():
     data = request.get_json()
 
     with db.engine.connect() as connection:
-        result = connection.execute("SELECT * FROM Users WHERE email = %s", (data['email'], ))
+        result = connection.execute(text("SELECT * FROM Users WHERE email = :email"), {"email": data['email']})
         user = result.fetchone()
+        user = dict(user._mapping) if user else None
 
         if not user:
             return make_response(jsonify({'error': 'User does not exist'}), 401)
@@ -81,7 +167,7 @@ def login():
             return make_response(jsonify({'error': 'Invalid password'}), 401)
 
         # Check if the user is an administrator
-        admin_result = connection.execute("SELECT * FROM Administrators WHERE uid = %s", (user['uid'], ))
+        admin_result = connection.execute(text("SELECT * FROM Administrators WHERE uid = :uid"), {"uid":user['uid']})
         admin = admin_result.fetchone()
         print("is Admin", admin)
         # If the user is an admin, return an additional attribute in the response

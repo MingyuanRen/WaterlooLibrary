@@ -74,7 +74,7 @@ const UserHome = () => {
             !displayMembership && !displayProfile && !displayRecords &&
             <UserProfile user={user} />
           }
-        {displayMembership && <MemberPage />}
+        {displayMembership && <MemberPage user={user} />}
         {displayProfile && <UserProfile user={user} />}
         {displayRecords && <BookRecords user={user} />}
         </Col>
