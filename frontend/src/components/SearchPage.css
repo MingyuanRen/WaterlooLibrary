@@ -27,11 +27,12 @@
     padding: 20px;
     font-size: 18px;
     float: left;
-    width: 80%;
+    width: 100%;
   }
 
   .search-container>form {
-    width: 1000px;
+    display: flex;
+    width: 1100px;
   }
   
 
@@ -39,7 +40,7 @@
     border:2px solid gray;
     outline:none;
     font:14px/30px;
-    padding-left: 10px;
+    padding-left: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
     width: 80%;
@@ -59,25 +60,42 @@
     padding: 12px 10px 12px 10px;
     cursor: pointer;
     font:14px/34px;
+    margin-left: 5px;
+    width: 200px;
   }
   
   .search-results {
     list-style: none;
     padding: 0;
     width: max-content;
+    align-items: center;
   }
   
   .search-results>tr>td {
-    padding: 5px;
+    padding: 10px;
   }
   
   .search-results li a {
     color: #333;
     text-decoration: none;
     font-size: 16px;
+
   }
   
   .search-results li a:hover {
     text-decoration: underline;
+  }
+
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  @media only screen and (max-width: 650px) {
+    .filters {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
   }
   

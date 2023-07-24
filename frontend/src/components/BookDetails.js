@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
 import './BookDetails.css';
 
 export const BookDetails = () => {
-    const location = useLocation()
+    const location = useLocation();
+    const [user, setUser] = useState(null);
 
     let book = location.state.book
-    const user = {"uid": 2}
+    useEffect(() => {
+        // Get user from location state and set it to state
+        setUser(location.state.user);
+      }, [location]);
 
     const handleBorrow = async (e) => {
         e.preventDefault();
