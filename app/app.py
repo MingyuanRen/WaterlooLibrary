@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 ####### DEBUG END
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost/library'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:458i*488P@localhost/library'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

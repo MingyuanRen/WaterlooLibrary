@@ -126,6 +126,27 @@ def redeem():
     
     return jsonify({"redeemable": "true"})
 
+@app.route('/api/userinfo/adminApply', methods=['POST'])
+def adminApply():
+    data = request.get_json()
+    print(data)
+    try:
+        with db.engine.connect() as connection:
+            connection.execute(text(
+                """
+                INSERT INTO AdminRequests (uid, reason) 
+                VALUES ({uid}, {reason})
+                """.format(
+                    uid = data['uid'],
+                    reason = data['reason']
+                )
+            ))
+        connection.commit()
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'application': 'false'}), 451)
+    return jsonify({"application": "true"})
+
 
 @app.route('/api/userinfo/bookstatus', methods=['POST'])
 def getBooks():
