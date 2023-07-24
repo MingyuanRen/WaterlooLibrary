@@ -152,7 +152,7 @@ two ways of running the application:
 
 1. Docker-compose up
 ```bash
-  docker compose up
+  docker-compose up
 ```
 
 2. Run Frontend and Backend Separately: 

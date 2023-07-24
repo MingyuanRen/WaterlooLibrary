@@ -17,8 +17,16 @@ def register():
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
     with db.engine.connect() as connection:
-        result = connection.execute("INSERT INTO Users (name, email, phone, password) VALUES (%s, %s, %s, %s)",
-                                    (data['name'], data['email'], data['phone'], hashed_password))
+        sql_query = text("INSERT INTO Users (name, email, phone, password) VALUES (:name, :email, :phone, :password)")
+        
+        result = connection.execute(
+                text("""
+                    INSERT INTO Users (name, email, phone, password)
+                    VALUES (:name, :email, :phone, :password)
+                """).params(name=data['name'], email=data['email'], phone=data['phone'], password=hashed_password)
+            )
+
+
         
     return jsonify({'message': 'New user created!'})
 
