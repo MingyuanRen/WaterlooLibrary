@@ -34,9 +34,9 @@ function AddBook() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.header}>Add Book</h1>
-      <form onSubmit={handleSubmit} className={styles.bookForm}>
+    <div className={styles.addBook_container}>
+      <h1 className={styles.addBook_header}>Add Book</h1>
+      <form onSubmit={handleSubmit} className={styles.addBook_bookForm}>
         <input
           type="text"
           name="isbn"

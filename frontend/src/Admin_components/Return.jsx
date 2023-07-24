@@ -32,9 +32,9 @@ function ReturnBook() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.header}>Return Book</h1>
-      <form onSubmit={handleSubmit} className={styles.bookForm}>
+    <div className={styles.returnBook_container}>
+      <h1 className={styles.returnBook_header}>Return Book</h1>
+      <form onSubmit={handleSubmit} className={styles.returnBook_bookForm}>
         <input type="text" name="isbn" placeholder="ISBN" onChange={handleChange} value={record.isbn}/>
         <input type="email" name="email" placeholder="User Email" onChange={handleChange} value={record.email}/>
         <button type="submit">Return Book</button>

@@ -33,8 +33,10 @@ function ViewUserInfo() {
   };
 
   return (
-    <div>
-      <form onSubmit={getUserInfo}>
+    <div className={styles.viewUserInfo_container}>
+      {/* <div> */}
+      <h1 className={styles.viewUserInfo_header}>View User Information</h1>
+      <form onSubmit={getUserInfo} className={styles.viewUserInfo_form}>
         <input
           type="email"
           placeholder="Enter email"
@@ -43,12 +45,12 @@ function ViewUserInfo() {
         />
         <button type="submit">Get User Info</button>
       </form>
-      {error && <div className={styles.error}>{error}</div>}
+      {error && <div className={styles.viewUserInfo_error}>{error}</div>}
       {userInfo.map((user, index) => (
-        <div key={index} className={styles.userInfo}>
+        <div key={index}>
           {editing === index ? (
             <>
-              <div className={styles.editableFields}>
+              <div className={styles.viewUserInfo_editableFields}>
                 <label>
                   Name:
                   <input
@@ -149,23 +151,85 @@ function ViewUserInfo() {
                     />
                   </label>
                 )}
+                <br></br>
+                <button onClick={() => handleUpdate(index, user)}>
+                  Submit Update
+                </button>
+                <hr></hr>
               </div>
-              <button onClick={() => handleUpdate(index, user)}>
-                Submit Update
-              </button>
             </>
           ) : (
             <>
-              <div className={styles.nonEditatbleFields}>
-                <p>ID: {user.uid}</p>
-                <p>Name: {user.name}</p>
-                <p>Email: {user.email}</p>
-                <p>Phone: {user.phone}</p>
-                {user.mid && <p>Member ID: {user.mid}</p>}
-                {user.mid && <p>Points: {user.points}</p>}
-                {user.mid && <p>Membership Start Date: {user.start_date}</p>}
-                {user.mid && <p>Membership End Date: {user.end_date}</p>}
+              <div className={styles.viewUserInfo_nonEditatbleFields}>
+                {/* <p> */}
+                <span className={styles.viewUserInfo_infoSpan}>
+                  <span className={styles.viewUserInfo_infoLabel}>ID: </span>{" "}
+                  <span>{user.uid}</span>
+                  {"     "}
+                </span>
+                <span className={styles.viewUserInfo_infoSpan}>
+                  <span className={styles.viewUserInfo_infoLabel}>Name: </span>{" "}
+                  <span>{user.name}</span>
+                  {"     "}
+                </span>
+                <span className={styles.viewUserInfo_infoSpan}>
+                  <span className={styles.viewUserInfo_infoLabel}>Email: </span>{" "}
+                  <span>{user.email}</span>
+                  {"     "}
+                </span>
+                <span className={styles.viewUserInfo_infoSpan}>
+                  <span className={styles.viewUserInfo_infoLabel}>Phone: </span>{" "}
+                  <span>{user.phone}</span>
+                  {"     "}
+                </span>
+
+                {/* <span className={styles.viewUserInfo_infoLabel}>Name: {user.name}</span> {" "}
+                <span className={styles.viewUserInfo_infoLabel}>Email: {user.email}</span> {" "}
+                <span className={styles.viewUserInfo_infoLabel}>Phone: {user.phone}</span> {" "} */}
+                {/* <span>Name: {user.name}</span> {"   "}
+                <span>Email: {user.email}</span> {"   "}
+                <span>Phone: {user.phone}</span> {"   "} */}
+                {/* </p> */}
+                <br></br>
+                {user.mid && (
+                  <span className={styles.viewUserInfo_infoSpan}>
+                    <span className={styles.viewUserInfo_infoLabel}>
+                      Member ID:{" "}
+                    </span>{" "}
+                    <span>{user.mid}</span>
+                    {"     "}
+                  </span>
+                )}
+                {user.mid && (
+                  <span className={styles.viewUserInfo_infoSpan}>
+                    <span className={styles.viewUserInfo_infoLabel}>
+                      Points:{" "}
+                    </span>{" "}
+                    <span>{user.points}</span>
+                    {"     "}
+                  </span>
+                )}
+                {user.mid && (
+                  <span className={styles.viewUserInfo_infoSpan}>
+                    <span className={styles.viewUserInfo_infoLabel}>
+                      Start Date:{" "}
+                    </span>{" "}
+                    <span>{user.start_date}</span>
+                    {"     "}
+                  </span>
+                )}
+                {user.mid && (
+                  <span className={styles.viewUserInfo_infoSpan}>
+                    <span className={styles.viewUserInfo_infoLabel}>
+                      End Date:{" "}
+                    </span>{" "}
+                    <span>{user.end_date}</span>
+                    {"     "}
+                  </span>
+                )}
+                {user.mid && <br></br>}
                 <button onClick={() => setEditing(index)}>Update Info</button>
+                <hr></hr>
               </div>
             </>
           )}

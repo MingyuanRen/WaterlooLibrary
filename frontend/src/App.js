@@ -13,9 +13,11 @@ import { UserContext } from './UserContext';
 import AddBook  from './Admin_components/AddBook';
 import Return  from './Admin_components/Return';
 import ViewUserInfo from './Admin_components/ViewUserInfo';
+import Requsts from './Admin_components/AdminApplication';
 import UserHome from './components/UserPage/UserHome';
 import UserProfile from './components/UserPage/UserProfile'
 import BookRecords from './components/UserPage/BookRecords'
+import Requests from './Admin_components/AdminApplication';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -31,6 +33,7 @@ const App = () => {
           <Route path="/admin/addBook" element={<AddBook />} />
           <Route path="/admin/return" element={<Return />} />
           <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
+          <Route path="/admin/requests" element={<Requests />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin-home" element={<AdminHome />} />
           <Route path="/search" element={<SearchPage />} />
