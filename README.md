@@ -1,6 +1,17 @@
 # Waterloo Library Management System
 
 This project is a database-driven application for managing a library. It uses MySQL as the database, Flask as the back-end server, and React for the front-end user interface.
+The Library Management Application is a robust and user-friendly solution designed to streamline the management of libraries. Leveraging the power of MySQL, Flask, and React, this application offers a comprehensive set of features for both users and administrators. Users can easily register and log in to access their personalized user page, where they can view their information, track borrow records, and conveniently search for, borrow, and reserve books. Administrators have access to an exclusive admin page, allowing them to efficiently add new books to the library, handle book returns, and conveniently view and edit user information. With its intuitive interface and powerful technology stack, the Library Management Application provides a seamless and efficient experience for managing libraries of any size.
+
+## Technologies Used
+
+The application leverages the following technologies:
+
+MySQL: A robust and reliable database management system, used to store and organize library data.
+
+Flask: A powerful and flexible Python-based web framework, chosen as the back-end server for its ease of use and extensibility.
+
+React: A popular JavaScript library for building user interfaces, enabling the creation of a dynamic and responsive front-end experience.
 
 ## Prerequisites
 
@@ -135,131 +146,158 @@ CREATE TABLE IF NOT EXISTS Redemption(
   SELECT * FROM users;
 ```
 
-## How to Run Flask Server
-after you set up the config for Flask, MySQL and done creating your local database,
+## How to Run the Application
+after you set up the config for Flask, React, MySQL and done creating your local database,
+two ways of running the application:
+
+1. Docker-compose up
+```bash
+  docker compose up
+```
+
+2. Run Frontend and Backend Separately: 
+
 Run the Flask server:
 
 ```bash
-  flask run --port 8000
+  cd app
+  python3 app.py
 ```
+
+Run the React Frontend:
+
+```bash
+  cd frontend
+  npm start
+```
+
 ## Current Design of the GUI (To be Updated)
+MainPage: The Main Page for our WaterlooLibrary Application
+
 Register and Login Page: A secured register and login system for users.
 
-User Info Page: A page showing the infomation of specific user including personal info, borrow record, reservation record and redemption(for MemberUser).
+User Page: A page showing the infomation of specific user including personal info, borrow record, reservation record and redemption(for MemberUser).
 
-Search Book Page: A page showing a list/table of books with details (like ISBN, title, author, year of publication, publisher, genre, inventory, price)
+Search Book Page: A page showing a list/table of books with details (like ISBN, title, author, year of publication, publisher, inventory, price)
 Search bar to filter the list by different criteria (like title, author, ISBN).
+
+Admin Page: A page for Administrators to manage user info, books inventory(add or return).
 
 Issue and Return Management: A system for checking books in and out, and updating the status of the books.
 
-Redemption Page: A page for Redemption.
+Adding Books Page: A page for Administrators to add books.
 
-Fine Management: A page to track these, issue reminders, and process payments.
+Updating User Info Page: A page for updating user's Info like email, phone number(only accessible for admin).
 
-Reservations: A page allowing users to reserve books that are currently borrowed by others.
+Redemption Page (To be Updated): A page for Redemption.
 
-## Current Supporting Features
+Fine Management (To be Updated): A page to track these, issue reminders, and process payments.
 
-1. Register User
-Once you run the Flask Application, you can test it with PostMan by sending post request to http://localhost:8000/register and using json object as body:
-```bash
-    {
-        "name": "John Doe",
-        "email": "john@example.com",
-        "phone": "1234567890",
-        "password": "password123"
-    }
-```
+Reservations (To be Updated): A page allowing users to reserve books that are currently borrowed by others.
 
-You should be able to see this, if the user has been successfully registered:
-```bash
-    {
-        "message": "New user created!"
-    }
-```
+## Current Features
+The Library Management Application offers the following features:
 
-2. Login User
-Sending post request to http://localhost:8000/login and using json object as body:
-```bash
-    {
-        "email": "john@example.com",
-        "password": "password123"
-    }
-```
-You should be able to see this, if the user successfully login:
-```bash
-    {
-        "message": "Login successful!"
-    }
-```
-3. Add Books
-Sending post request to http://localhost:8000/books and using json object as body:
-```bash
-    {
-        "isbn": "978-3-16-148410-0",
-        "title": "The Great Gatsby",
-        "author": "F. Scott Fitzgerald",
-        "year_of_publication": "1925",
-        "publisher": "Charles Scribner's Sons",
-        "genre": "Novel",
-        "inventory": 10,
-        "price": 15.99
-    }
-```
-You should be able to see this, if boos has been successfully added:
-```bash
-    {
-        "message": "New book added!"
-    }
-```
+User Registration and Login: Users can easily create an account and log in to access the application.
 
-4. Seach Book
-Sending Get request to http://localhost:8000/books/search?title=Great and using params { "title" : "Great" }
-In this Example, the keyword for title "Great" is used, currently we support ['title', 'author', 'isbn', 'genre'] as keyword(you can use mutiple of these for search)
+User Page: Users have their own dedicated page where they can view their personal information, check their borrow records, and manage their account.
 
-You should be able to see all the books with title contains Great
-```bash
-[
-    {
-        "ISBN": "9783161484100",
-        "author": "F. Scott Fitzgerald",
-        "genre": "Novel",
-        "inventory": 10,
-        "price": "15.99",
-        "publisher": "Charles Scribner's Sons",
-        "title": "The Great Gatsby",
-        "year_of_publication": "Thu, 01 Jan 1925 00:00:00 GMT"
-    },
-    {
-        "ISBN": "9783161484110",
-        "author": "F. Scott Fitzgerald",
-        "genre": "Novel",
-        "inventory": 6,
-        "price": "15.99",
-        "publisher": "Charles Scribner's Sons",
-        "title": "The Great Gatsby",
-        "year_of_publication": "Thu, 01 Jan 1925 00:00:00 GMT"
-    }
-]
-```
+Book Page: Users can search for books, borrow books, and reserve books through the intuitive book page.
 
-5. Borrow Books
-Sending Post request to http://localhost:8000/books/borrow and and using json object as body:
-Suppose you are number 1 user, and you want to borrow The Great Gatsby which has 9783161484110 as isbn
-```bash
-    {
-        "uid": "1",
-        "isbn": "9783161484110"
-    }
-```
-You should be able to see this json object as return if you borrow this book successfully
-```bash
-    {
-        'message': 'Book borrowed successfully'
-    }
-```
+Admin Page: Administrators have access to an exclusive admin page where they can add new books to the library, handle book returns, and view and edit user information.
 
-## Sample SQL
--- All the queries in the test-sample.sql are been given using actual examples
+All the frontend related implementation files can be found under WaterlooLibrary/frontend/src.
+All the backend related implementation files can be found under WaterlooLibrary/app.py.(the backend main file)
 
--- The actuall implementation of the queries in the application includes changes on the actual values 
+### Routes
+    <Route path="/login" element={<Login />} />
+
+    <Route path="/register" element={<Register />} />
+
+    <Route path="/homepage" element={<HomePage />} />
+
+    <Route path="/admin/addBook" element={<AddBook />} />
+
+    <Route path="/admin/return" element={<Return />} />
+
+    <Route path="/admin/viewUserInfo" element={<ViewUserInfo />} />
+
+    <Route path="/home" element={<Home />} />
+
+    <Route path="/admin-home" element={<AdminHome />} />
+
+    <Route path="/search" element={<SearchPage />} />
+
+    <Route path="/book-results" element={<BookResults />} />
+
+    <Route path="/books/:isbn" element={<BookDetails />} />
+
+    <Route path="/user-home" element={<UserHome />} />
+
+    <Route path="/user-profile" element={<UserProfile />} />
+
+    <Route path="/bookrecords" element={<BookRecords />} />
+    
+    <Route path="/" element={<Navigate to="/homepage" />} />
+
+### Feature Pictures
+1. MainPage
+![MainPage](assets/mainpage.png "MainPage")
+
+### User
+
+2. Register User
+![registerpage](assets/registerpage.png "Register Page")
+
+3. Login User
+![LoginPage](assets/LoginPage.png "Login Page")
+
+3. User Page(After Register or Login)
+![UserInfo](assets/UserInfo.png "User Info")
+which also contains User Profile page
+
+4. User's Borrow Records
+![BorrowRecordsExample](assets/BorrowRecordsExample.jpg "Borrow Records")
+
+### Book
+5. Search Books
+![bookSearchPage](assets/bookSearchPage.jpg "Book Search Page")
+
+6. Book Search Result(In which Page You can Select your ideal Books)
+![bookSearchResult](assets/bookSearchResult.jpg "Book Search Result")
+
+7. Borrow and Reserve Books
+![Borrow Book](assets/borrowBook.jpg "Borrow Book")
+
+![Reserve Book](assets/reserveBook.jpg "Reserve Book")
+
+### Administrator
+Some Features can only be achieved by Administrators(which are users in the Administrator table)
+
+8. Administrator Page
+![Admin Page](assets/adminpage.jpg "Admin Page")
+
+9. Add Book
+![Add Book](assets/addBooks.jpeg "Add Book")
+
+10. Return Book
+![Return Book](assets/returnBook.jpeg "Return Book")
+
+11. View And Edit User Info
+![Get User Info](assets/adminGetUserInfo.png "Get User Info")
+
+![User Info Example](assets/adminUserInfoExample.png "User Info Example")
+
+![Update User Info](assets/adminUserInfoChange.png "Update User Info")
+
+## Sample and Production SQL
+-- All the queries, input and output for both production and sample db are listed under samples folder, more details can be found under this folde and from the main Report .
+
+## Generate Production Dataset and Load to Database
+For the real database, we choose the approach that combines import from a real large database, and randomly generated entries by scripts. 
+
+The major table that is going to use a lot real data is “Books”. As a library management system, it is possible to have limited users and borrow records, but the number of books we have has to be enough. Thus, we found a real database for books (https://www.kaggle.com/datasets/saurabhbagchi/books-dataset), and use it as the base database. 
+
+Our “Books” tables contains “price” and “inventory”, which are not included in the real database, and the real database contains “img-url” which is not used by our database. Thus, we take “ISBN”, “title”, “author”, “year-of-publication” and “publisher” from the database for each book, and we use script to automatically generate “inventory” and “price” for that book. Finally, we combine the data and insert it into the database.
+
+More details about implementation can be found under update_tables folder(including both sample and production), create_tables.py and update_tables.py.
