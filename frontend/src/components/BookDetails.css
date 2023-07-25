@@ -1,25 +1,22 @@
-.book-details-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
   .book-details-card {
-    width: 800px;
-    border: 5px solid #ccc;
-    padding: 20px;
+    width: 600px;
+    height: 300px;
+    border: 5px solid #007bff3b;
+    padding: 10px;
     margin: 20px;
   }
   
   .book-details-card h2 {
-
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 25px;
+    padding:5px 5px 15px;
+    border-bottom: 3px dashed #007bff3b;
   }
   
   .book-details-card p {
-    font-size: 16px;
-    margin-bottom: 5px;
+    font-size: 20px;
+    /* margin-bottom: 5px;
+    margin-top: 10px; */
+    padding:5px 5px ;
   }
   
   .book-details-card button {
@@ -30,4 +27,33 @@
     cursor: pointer;
     margin: 10px;
   }
+
+  .book-details-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
   
+  .left-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px; /* Add spacing between the icon and book details */
+  }
+  
+  .book-icon img {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .buttons {
+    margin-top: 10px; /* Add spacing between the buttons and the book icon */
+    transition: transform 0.2s;
+  }
+
+  .button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+  }

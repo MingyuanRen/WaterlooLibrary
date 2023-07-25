@@ -39,7 +39,7 @@ export const Login = () => {
         if (res.data.is_admin) {
           navigate('/admin-home', { state: { user: userDetails.data } }); // redirect to admin home page
         } else {
-          navigate('/user-home', { state: { user: userDetails.data } }); // redirect to user home page
+          navigate('/search', { state: { user: userDetails.data } }); // redirect to search page
         }
       }
     } catch (error) {
