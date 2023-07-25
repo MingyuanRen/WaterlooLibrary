@@ -17,9 +17,10 @@ def register():
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
     with db.engine.connect() as connection:
-        result = connection.execute("INSERT INTO Users (name, email, phone, password) VALUES (%s, %s, %s, %s)",
-                                    (data['name'], data['email'], data['phone'], hashed_password))
-        
+        result = connection.execute(text("INSERT INTO Users (name, email, phone, password) VALUES ('{name}', '{email}', '{phone}', '{password}')".format( 
+            name = data['name'], email = data['email'], phone = data['phone'], password = hashed_password)))
+        connection.commit()
+
     return jsonify({'message': 'New user created!'})
 
 @app.route('/api/userinfo/account', methods=['POST'])
@@ -51,9 +52,9 @@ def getBooks():
 
     booksData = []
     try:
-        statement = "SELECT title, author, DateBorrowed, DateDue FROM BorrowRecord r LEFT JOIN Books b ON r.ISBN = b.ISBN LEFT JOIN Users u ON u.uid = r.uid  WHERE u.uid = %s AND DateReturned IS NULL"
+        statement = "SELECT title, author, DateBorrowed, DateDue FROM BorrowRecord r LEFT JOIN Books b ON r.ISBN = b.ISBN LEFT JOIN Users u ON u.uid = r.uid  WHERE u.uid = {uid} AND DateReturned IS NULL"
         with db.engine.connect() as connection:
-            result = connection.execute(statement, (data["uid"],)).fetchall()
+            result = connection.execute(text(statement.format(uid = data['uid']))).fetchall()
             print("hello world")
             for record in result:
                 booksData.append(dict(record._mapping))
@@ -71,17 +72,17 @@ def login():
     data = request.get_json()
 
     with db.engine.connect() as connection:
-        result = connection.execute("SELECT * FROM Users WHERE email = %s", (data['email'], ))
+        result = connection.execute(text("SELECT * FROM Users WHERE email = '{email}'".format(email = data['email'])))
         user = result.fetchone()
 
         if not user:
             return make_response(jsonify({'error': 'User does not exist'}), 401)
 
-        if not check_password_hash(user['password'], data['password']):
+        if not check_password_hash(user[4], data['password']):
             return make_response(jsonify({'error': 'Invalid password'}), 401)
 
         # Check if the user is an administrator
-        admin_result = connection.execute("SELECT * FROM Administrators WHERE uid = %s", (user['uid'], ))
+        admin_result = connection.execute(text("SELECT * FROM Administrators WHERE uid = {uid}".format(uid = user[0])))
         admin = admin_result.fetchone()
         print("is Admin", admin)
         # If the user is an admin, return an additional attribute in the response
@@ -95,7 +96,9 @@ def get_user():
     email = request.args.get('email')
     
     with db.engine.connect() as connection:
-        result = connection.execute(text("SELECT name, email, phone, uid FROM Users WHERE email = :email"), {'email': email})
+        result = connection.execute(text("SELECT name, email, phone, uid FROM Users WHERE email = '{email}'".format(
+            email = email
+        )))
 
     user = result.fetchone()
 
@@ -110,9 +113,20 @@ def add_book():
     data = request.get_json()
 
     with db.engine.connect() as connection:
-        result = connection.execute("INSERT INTO Books (ISBN, title, author, year_of_publication, publisher, genre, inventory, price) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-                                    (data['isbn'], data['title'], data['author'], data['year_of_publication'], data['publisher'], data['genre'], data['inventory'], data['price']))
-
+        result = connection.execute(text(
+            """
+            INSERT INTO Books (ISBN, title, author, year_of_publication, publisher, inventory, price) 
+            VALUES ('{ISBN}', '{title}', '{author}', DATE '{year_of_publication}', '{publisher}', {inventory}, {price})
+            """.format(
+                ISBN = data['isbn'],
+                title = data['title'],
+                author = data['author'],
+                year_of_publication = data['year_of_publication'],
+                publisher = data['publisher'],
+                inventory = data['inventory'],
+                price = data['price'],
+           )))
+        connection.commit()
     return jsonify({'message': 'New book added!'})
 
 @app.route('/books/search', methods=['GET'])
@@ -152,13 +166,14 @@ def borrow_book():
 
     with db.engine.connect() as connection:
         # Check if the book is available
-        book = connection.execute(text("SELECT * FROM Books WHERE ISBN = :isbn"), {"isbn": isbn}).fetchone()
+        book = connection.execute(text("SELECT * FROM Books WHERE ISBN = {isbn}".format(isbn = isbn))).fetchone()
         inventory = 6
         if not book or book[inventory] <= 0:
             return jsonify({'message': 'This book is not available'}), 400
 
         # Decrease the book inventory
-        connection.execute(text("UPDATE Books SET inventory = inventory - 1 WHERE ISBN = :isbn"), {"isbn": isbn})
+        connection.execute(text("UPDATE Books SET inventory = inventory - 1 WHERE ISBN = {isbn}".format(isbn = isbn)))
+        connection.commit()
 
         # Record the borrowing operation
         DateBorrowed = datetime.now()
