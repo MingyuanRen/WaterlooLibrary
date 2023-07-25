@@ -19,27 +19,33 @@ export const BookDetails = () => {
 
     const handleBorrow = async (e) => {
         e.preventDefault();
+        let email = user.email;
+        const user_info = await axios.get('/user', {params: { email }, });
+        let uid = user_info.data.uid;
 
         try {
-            const res = await axios.post('/books/borrow', { isbn: book.isbn, uid: user.uid })
+            const res = await axios.post('/books/borrow', { isbn: book.isbn, uid: uid });
             if (res.data.message === 'Book borrowed successfully') {
                 alert(res.data.message);
             }
         } catch (error) {
-            alert(error.response.data.error);
+            alert("Book was not borrowed successfully");
         }
     };
     const handleReserve = async (e) => {
         e.preventDefault();
+        let email = user.email;
+        const user_info = await axios.get('/user', {params: { email }, });
+        let uid = user_info.data.uid;
 
         try {
-            const res = await axios.post('/books/reserve', { isbn: book.isbn, uid: user.uid })
+            const res = await axios.post('/books/reserve', { isbn: book.isbn, uid: uid });
             alert(res.data.message);
             if (res.data.message === 'Book reserved successfully') {
                 alert(res.data.message);
             }
         } catch (error) {
-            alert(error.response.data.error);
+            alert("Book did not get reserved");
         }
     };
 
