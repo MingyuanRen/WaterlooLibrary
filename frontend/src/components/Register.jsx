@@ -3,7 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store'; // import the action from your store
+import { FaUser, FaEnvelope, FaPhone, FaLock } from 'react-icons/fa';
 import './Register.css';
+
 
 export const Register = () => {
   const [data, setData] = useState({
@@ -39,10 +41,22 @@ export const Register = () => {
     <div className="container">
       <h1 className="header">Register</h1>
       <form className="register-form" onSubmit={register}>
-        <input type='text' name='name' placeholder='Name' className="input-field" onChange={handleChange} required />
-        <input name='email' placeholder='Email' className="input-field" onChange={handleChange} required />
-        <input type='tel' name='phone' placeholder='Phone' className="input-field" onChange={handleChange} required />
-        <input type='password' name='password' placeholder='Password' className="input-field" onChange={handleChange} required />
+        <div className="input-container">
+          <FaUser className="input-icon" />
+          <input type='text' name='name' placeholder='Name' className="input-field" onChange={handleChange} required />
+        </div>
+        <div className="input-container">
+          <FaEnvelope className="input-icon" />
+          <input name='email' placeholder='Email' className="input-field" onChange={handleChange} required />
+        </div>
+        <div className="input-container">
+          <FaPhone className="input-icon" />
+          <input type='tel' name='phone' placeholder='Phone' className="input-field" onChange={handleChange} required />
+        </div>
+        <div className="input-container">
+          <FaLock className="input-icon" />
+          <input type='password' name='password' placeholder='Password' className="input-field" onChange={handleChange} required />
+        </div>
         <button type='submit' className="submit-btn">Register</button>
       </form>
     </div>
