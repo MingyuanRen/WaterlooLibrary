@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {useLocation} from 'react-router-dom';
 import "./newSP.css"; //change CSS file
 import { Link } from "react-router-dom";
 import { Filter, UserIcon } from "./filter.jsx";
@@ -7,23 +8,27 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const SearchPage = () => {
   let counter = 1;
-  const [searchQuery, setSearchQuery] = useState("");
+  const [value, setvalue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [activeFilter, setActiveFilter] = useState("");
+  const [user, setUser] = useState(null);
+  const location = useLocation();
 
+  useEffect(() => {
+      // Get user from location state and set it to state
+      setUser(location.state.user);
+    }, [location]);
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      /*
-            const response = await axios.get('/books/search', {
-                params: { value },
-            });
-            console.log(response.data.status_code)
-            if (response.data.status_code === 400 || response.data.status_code === 404) {
-                alert(response.data.message)
-            }
-            setSearchResults(response.data);*/
-      setSearchResults([{ isbn: "123456789", title: "fake_title" , author: "a"}]);
+        const response = await axios.get('/books/search', {
+            params: { value },
+        });
+        console.log(response.data.status_code)
+        if (response.data.status_code === 400 || response.data.status_code === 404) {
+            alert(response.data.message)
+        }
+        setSearchResults(response.data);
     } catch (error) {
       alert(error.response.data.error);
     }
@@ -32,7 +37,7 @@ export const SearchPage = () => {
   return (
     <motion.div>
         <div>
-            <Link to="/user-home">
+            <Link to="/user-home" state={{ user: user }}>
                 <UserIcon/>
             </Link>
         </div>
@@ -79,8 +84,8 @@ export const SearchPage = () => {
             <input
               className="search-input"
               type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={value}
+              onChange={(e) => setvalue(e.target.value)}
               placeholder="Search a Book..."
             />
             <button className="search-button" type="submit">
@@ -94,10 +99,10 @@ export const SearchPage = () => {
       {searchResults
             ?.filter((book) => {
               const titleMatch =
-                !(activeFilter.includes('title')) || book.title.toLowerCase().includes(searchQuery.toLowerCase());
+                !(activeFilter.includes('title')) || book.title.toLowerCase().includes(value.toLowerCase());
               const authorMatch =
-                !(activeFilter.includes('author')) || book.author.toLowerCase().includes(searchQuery.toLowerCase());
-              const isbnMatch = !(activeFilter.includes('isbn')) || book.isbn.includes(searchQuery);
+                !(activeFilter.includes('author')) || book.author.toLowerCase().includes(value.toLowerCase());
+              const isbnMatch = !(activeFilter.includes('isbn')) || book.isbn.includes(value);
 
               return titleMatch && authorMatch && isbnMatch;
             })
@@ -112,7 +117,7 @@ export const SearchPage = () => {
                       <th scope="row" className="row-num">{counter++}</th>
                       </div>
                       <td key={book.isbn} className="return_title">
-                        <Link to={`/books/${book.isbn}`} state={{ book: book }}>
+                        <Link to={`/books/${book.isbn}`} state={{ book: book, user: user }}>
                           {book.title}
                        </Link>
                       </td>

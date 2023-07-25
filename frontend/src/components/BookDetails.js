@@ -46,7 +46,7 @@ export const BookDetails = () => {
     return (
         <motion.div>
         <div>
-            <Link to="/user-home">
+            <Link to="/user-home" state={{ user: user }}>
                 <UserIcon/>
             </Link>
         </div>
