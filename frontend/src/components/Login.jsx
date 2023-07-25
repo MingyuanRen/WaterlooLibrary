@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../store'; 
+import { setUser } from '../store';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 import './Login.css';
 
 export const Login = () => {
@@ -50,22 +51,27 @@ export const Login = () => {
     <div className="container">
       <h1 className="header">Login</h1>
       <form className="login-form" onSubmit={login}>
-        <input 
-          // type="email"
-          name="email"
-          placeholder="Email"
-          className="input-field"
-          onChange={handleChange} 
-          required 
-        />
-        <input 
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="input-field"
-          onChange={handleChange}
-          required 
-        />
+        <div className="input-container">
+          <FaEnvelope className="input-icon" />
+          <input 
+            name="email"
+            placeholder="Email"
+            className="input-field"
+            onChange={handleChange} 
+            required 
+          />
+        </div>
+        <div className="input-container">
+          <FaLock className="input-icon" />
+          <input 
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="input-field"
+            onChange={handleChange}
+            required 
+          />
+        </div>
         <button type="submit" className="submit-btn">Login</button>
       </form>
     </div>
