@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./SearchPage.css";
+import "./newSP.css"; //change CSS file
 import { Link } from "react-router-dom";
 import { Filter, UserIcon } from "./filter.jsx";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,43 +36,42 @@ export const SearchPage = () => {
                 <UserIcon/>
             </Link>
         </div>
-      <div className="search">
-        <h2 className="search-title">Book Search</h2>
-      </div>
+      <h2 className="search-title">Book Search</h2>
       <div className="filters">
-      <Filter
-          title="Title"
-          isActive={activeFilter.includes('title')}
-          onClick={() =>
-            setActiveFilter((prevFilters) =>
-              prevFilters.includes('title')
-                ? prevFilters.filter((filter) => filter !== 'title')
-                : [...prevFilters, 'title']
-            )
-          }
-        />
+        <h5 class = "filterText">Search Includes:</h5>
         <Filter
-          title="Author"
-          isActive={activeFilter.includes('author')}
-          onClick={() =>
-            setActiveFilter((prevFilters) =>
-              prevFilters.includes('author')
-                ? prevFilters.filter((filter) => filter !== 'author')
-                : [...prevFilters, 'author']
-            )
-          }
-        />
-        <Filter
-          title="ISBN"
-          isActive={activeFilter.includes('isbn')}
-          onClick={() =>
-            setActiveFilter((prevFilters) =>
-              prevFilters.includes('isbn')
-                ? prevFilters.filter((filter) => filter !== 'isbn')
-                : [...prevFilters, 'isbn']
-            )
-          }
-        />
+            title="Title"
+            isActive={activeFilter.includes('title')}
+            onClick={() =>
+              setActiveFilter((prevFilters) =>
+                prevFilters.includes('title')
+                  ? prevFilters.filter((filter) => filter !== 'title')
+                  : [...prevFilters, 'title']
+              )
+            }
+          />
+          <Filter
+            title="Author"
+            isActive={activeFilter.includes('author')}
+            onClick={() =>
+              setActiveFilter((prevFilters) =>
+                prevFilters.includes('author')
+                  ? prevFilters.filter((filter) => filter !== 'author')
+                  : [...prevFilters, 'author']
+              )
+            }
+          />
+          <Filter
+            title="ISBN"
+            isActive={activeFilter.includes('isbn')}
+            onClick={() =>
+              setActiveFilter((prevFilters) =>
+                prevFilters.includes('isbn')
+                  ? prevFilters.filter((filter) => filter !== 'isbn')
+                  : [...prevFilters, 'isbn']
+              )
+            }
+          />
       </div>
       <div className="search">
         <div className="search-container">
@@ -82,6 +81,7 @@ export const SearchPage = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search a Book..."
             />
             <button className="search-button" type="submit">
               Search
@@ -103,17 +103,26 @@ export const SearchPage = () => {
             })
           .map((book) => {
             return (
-                <scroll>
-                  <tr>
-                <th scope="row">{counter++}</th>
-                <td key={book.isbn}>
-                  <Link to={`/books/${book.isbn}`} state={{ book: book }}>
-                    {book.title}
-                  </Link>
-                </td>
-                <td>{book.author}</td>
-              </tr>  
+              <div className="filter-results">
+                <scroll className="scroll_table">
+                  <div className="return_table">
+                  <div className="table_row">
+                    <tr>
+                      <div className="row_num_cell">
+                      <th scope="row" className="row-num">{counter++}</th>
+                      </div>
+                      <td key={book.isbn} className="return_title">
+                        <Link to={`/books/${book.isbn}`} state={{ book: book }}>
+                          {book.title}
+                       </Link>
+                      </td>
+                      <td className="return_author">{book.author}</td>
+                    </tr>  
+                  </div> 
+                  </div>
                 </scroll>
+              </div>
+                
             );
           })}
       </AnimatePresence>
