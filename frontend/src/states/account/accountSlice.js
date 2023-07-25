@@ -17,7 +17,8 @@ const initialState = {
     bookRecords: [],
     memberinfo : null,
     giftsList: [],
-    redeemable: null
+    redeemable: null,
+    application: null,
 }
 // Register new user
 export const accountInfo = createAsyncThunk(
@@ -82,6 +83,19 @@ export const redeem = createAsyncThunk(
   }
 );
 
+export const adminApply = createAsyncThunk(
+  'userinfo/adminApply',
+  async ({uid, reason}, thunkAPI) => {
+    try {
+      console.log("in slice: uid: ",uid);
+      const response = await accountService.adminApply(uid, reason);
+      console.log("response data", response);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
 
 // export const getBooksRecords = createAsyncThunk(
 //     'userinfo/bookstatus',
@@ -206,8 +220,19 @@ export const accountSlice = createSlice({
           state.isError = true
           state.redeemable = false
         })
-
-
+        .addCase(adminApply.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(adminApply.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.application = action.payload
+        })
+        .addCase(adminApply.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+          state.application = false
+        })
     },
 })
 
@@ -236,6 +261,7 @@ export const accountSlice = createSlice({
 //       });
 //   },
 // });
+
 
 export const { reset } = accountSlice.actions
 export default accountSlice.reducer

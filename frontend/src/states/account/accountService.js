@@ -78,7 +78,7 @@ const getGiftsList = async(uid) => {
 
 const redeem = async(uid, item, points, points_need) => {
   try{
-    console.log("redemm::", uid, item, points, points_need)
+    console.log("redeem::", uid, item, points, points_need)
     const body = {
       "uid": uid, 
       "item": item, 
@@ -97,12 +97,31 @@ const redeem = async(uid, item, points, points_need) => {
   }
 }
 
+const adminApply = async(uid, reason) => {
+  try{
+    console.log("Admin Application: ")
+    const body = {
+      "uid": uid,
+      "reason": reason,
+    }
+    console.log(body)
+    const response = await axios.post(API_URL + '/adminApply', body);
+    console.log("applying...", response.data);
+    localStorage.setItem("application", response.data)
+    return response.data.applied;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
 const accountService = {
   findUserInfo,
   getBooksRecords,
   membershipInfo,
   getGiftsList,
-  redeem
+  redeem,
+  adminApply
 }
 
 export default accountService

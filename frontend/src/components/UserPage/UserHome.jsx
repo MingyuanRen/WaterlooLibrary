@@ -4,6 +4,7 @@ import { Container, Form, Button, Row, Col } from 'react-bootstrap'
 import MemberPage from './MemberPage';
 import UserProfile from './UserProfile';
 import BookRecords from './BookRecords';
+import AdminApply from './AdminApplication';
 import { useSelector } from 'react-redux';
 import "./UserHome.css"
 
@@ -23,6 +24,7 @@ const UserHome = () => {
   const [displayProfile, setDisplayProfile ] = useState(false)
   const [displayRecords, setDisplayRecords ] = useState(false)
   const [displayMembership, setDisplayMembership ] = useState(false)
+  const [displayApply, setDisplayApply ] = useState(false)
 
   const clickProfileHandler = (e) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ const UserHome = () => {
     setDisplayProfile(true)
     setDisplayRecords(false)
     setDisplayMembership(false)
+    setDisplayApply(false)
   }
   
   const clickRecordHandler = (e) => {
@@ -38,6 +41,7 @@ const UserHome = () => {
     setDisplayProfile(false)
     setDisplayRecords(true)
     setDisplayMembership(false)
+    setDisplayApply(false)
   }
   
   const clickMembershipHandler = (e) => {
@@ -46,6 +50,16 @@ const UserHome = () => {
     setDisplayProfile(false)
     setDisplayRecords(false)
     setDisplayMembership(true)
+    setDisplayApply(false)
+  }
+
+  const clickAdminApplyHandler = (e) => {
+    e.preventDefault();
+
+    setDisplayProfile(false)
+    setDisplayRecords(false)
+    setDisplayMembership(false)
+    setDisplayApply(true)
   }
 
   return (
@@ -66,17 +80,21 @@ const UserHome = () => {
               <Row>
                 <Button variant="secondary" onClick={clickMembershipHandler}>Membership</Button>
               </Row>
+              <Row>
+                <Button variant="secondary" onClick={clickAdminApplyHandler}>Apply for Administrator!</Button>
+              </Row>
                 </ul>
             </Col>
         </Col>
         <Col md="6" className='content-column'>
           {
-            !displayMembership && !displayProfile && !displayRecords &&
+            !displayApply && !displayMembership && !displayProfile && !displayRecords &&
             <UserProfile user={user} />
           }
         {displayMembership && <MemberPage user={user} />}
         {displayProfile && <UserProfile user={user} />}
         {displayRecords && <BookRecords user={user} />}
+        {displayApply && <AdminApply user={user} />}
         </Col>
       </Row>
       {/* </div> */}
