@@ -3,6 +3,8 @@
 This project is a database-driven application for managing a library. It uses MySQL as the database, Flask as the back-end server, and React for the front-end user interface.
 The Library Management Application is a robust and user-friendly solution designed to streamline the management of libraries. Leveraging the power of MySQL, Flask, and React, this application offers a comprehensive set of features for both users and administrators. Users can easily register and log in to access their personalized user page, where they can view their information, track borrow records, and conveniently search for, borrow, and reserve books. Administrators have access to an exclusive admin page, allowing them to efficiently add new books to the library, handle book returns, and conveniently view and edit user information. With its intuitive interface and powerful technology stack, the Library Management Application provides a seamless and efficient experience for managing libraries of any size.
 
+![Home Page](assets/homepage.png "Home Page")
+
 ## Technologies Used
 
 The application leverages the following technologies:
@@ -152,7 +154,7 @@ two ways of running the application:
 
 1. Docker-compose up
 ```bash
-  docker compose up
+  docker-compose up
 ```
 
 2. Run Frontend and Backend Separately: 
@@ -172,7 +174,7 @@ Run the React Frontend:
 ```
 
 ## Current Design of the GUI (To be Updated)
-MainPage: The Main Page for our WaterlooLibrary Application
+MainPage(HomePage): The Main Page for our WaterlooLibrary Application
 
 Register and Login Page: A secured register and login system for users.
 
@@ -242,7 +244,7 @@ All the backend related implementation files can be found under WaterlooLibrary/
 
 ### Feature Pictures
 1. MainPage
-![MainPage](assets/mainpage.png "MainPage")
+![Home Page](assets/homepage.png "Home Page")
 
 ### User
 
@@ -274,21 +276,33 @@ which also contains User Profile page
 ### Administrator
 Some Features can only be achieved by Administrators(which are users in the Administrator table)
 
+And users can apply for administrator permissions, the application result will be sent to user's email.
+
 8. Administrator Page
-![Admin Page](assets/adminpage.jpg "Admin Page")
+![Admin Page](assets/Adminhome.png "Admin Page")
 
 9. Add Book
-![Add Book](assets/addBooks.jpeg "Add Book")
+![Add Book](assets/AddBook.png "Add Book")
 
 10. Return Book
-![Return Book](assets/returnBook.jpeg "Return Book")
+![Return Book](assets/ReturnBook.png "Return Book")
 
 11. View And Edit User Info
 ![Get User Info](assets/adminGetUserInfo.png "Get User Info")
 
-![User Info Example](assets/adminUserInfoExample.png "User Info Example")
+![User Info Example](assets/ViewUserinfo(NoInput).png "User Info Example")
 
-![Update User Info](assets/adminUserInfoChange.png "Update User Info")
+![User Info Example2](assets/ViewUserInfo(tworesults).png "User Info Example2")
+
+![Update User Info](assets/UpdateUserinfo.png "Update User Info")
+
+12. Admin Application
+![Admin Application](assets/Applications.png "Admin Application")
+
+![Approve Application](assets/ApproveEmail.png "Approve Application")
+
+![Disapprove Application](assets/DisapproveEmail.png "Disapprove Application")
+
 
 ## Sample and Production SQL
 -- All the queries, input and output for both production and sample db are listed under samples folder, more details can be found under this folde and from the main Report .
