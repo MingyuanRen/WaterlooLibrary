@@ -238,7 +238,7 @@ And users can apply for administrator permissions, the application result will b
 
 
 ## Sample and Production SQL
--- All the queries, input and output for both production and sample db are listed under samples folder, more details can be found under this folde and from the main Report .
+-- All the queries, input and output for both production and sample db are listed under sample and production query folder, more details can be found under this folde and from the main Report.
 
 ## Generate Production Dataset and Load to Database
 For the real database, we choose the approach that combines import from a real large database, and randomly generated entries by scripts. 
