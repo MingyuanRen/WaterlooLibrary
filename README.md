@@ -54,73 +54,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ```
 
-3. SQL SCHEMA
-```sql
-CREATE DATABASE library;
-
-USE library;
-
-CREATE TABLE IF NOT EXISTS Users (
-    uid INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    phone VARCHAR(10) NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS Books(
-    ISBN VARCHAR(13) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    year_of_publication DATE,
-    publisher VARCHAR(255),
-    genre VARCHAR(50),
-    inventory INT NOT NULL,
-    price DECIMAL(10,2) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS MemberUsers(
-    uid INT NOT NULL,
-    mID INT PRIMARY KEY AUTO_INCREMENT,
-    points INT NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    INDEX (uid),
-    FOREIGN KEY(uid) REFERENCES Users(uid)
-);
-
-CREATE TABLE IF NOT EXISTS Gifts(
-    item VARCHAR(255) PRIMARY KEY,
-    point_need INT NOT NULL,
-    inventory INT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS BorrowRecord(
-    rid INT PRIMARY KEY AUTO_INCREMENT,
-    uid INT NOT NULL REFERENCES Users(uid),
-    ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
-    renewable BOOLEAN NOT NULL,
-    DateBorrowed DATE NOT NULL,
-    DateDue DATE NOT NULL,
-    DateReturned DATE
-);
-
-CREATE TABLE IF NOT EXISTS Reservation(
-    uid INT NOT NULL REFERENCES MemberUsers(uid),
-    ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
-    DateReserved DATE NOT NULL,
-    ExpireDate DATE NOT NULL,
-    PRIMARY KEY(uid, ISBN)
-);
-
-CREATE TABLE IF NOT EXISTS Redemption(
-    uid INT NOT NULL REFERENCES MemberUsers(uid),
-    item VARCHAR(255) NOT NULL REFERENCES Gifts(item),
-    date Date NOT NULL,
-    PRIMARY KEY(uid, item)
-);
-```
-
 ## How to Create Database 
 1. Create library schema in MySQL server or MySQL Workbench
 2. Change config for local database  
@@ -173,7 +106,7 @@ Run the React Frontend:
   npm start
 ```
 
-## Current Design of the GUI (To be Updated)
+## Design of the GUI
 MainPage(HomePage): The Main Page for our WaterlooLibrary Application
 
 Register and Login Page: A secured register and login system for users.
@@ -183,7 +116,11 @@ User Page: A page showing the infomation of specific user including personal inf
 Search Book Page: A page showing a list/table of books with details (like ISBN, title, author, year of publication, publisher, inventory, price)
 Search bar to filter the list by different criteria (like title, author, ISBN).
 
+Borrow books and Reservations Page: A page allowing users to borrow or reserve books.
+
 Admin Page: A page for Administrators to manage user info, books inventory(add or return).
+
+Admin Application: A page for users to apply for administrator.
 
 Issue and Return Management: A system for checking books in and out, and updating the status of the books.
 
@@ -191,11 +128,7 @@ Adding Books Page: A page for Administrators to add books.
 
 Updating User Info Page: A page for updating user's Info like email, phone number(only accessible for admin).
 
-Redemption Page (To be Updated): A page for Redemption.
-
-Fine Management (To be Updated): A page to track these, issue reminders, and process payments.
-
-Reservations (To be Updated): A page allowing users to reserve books that are currently borrowed by others.
+Redemption Page: A page for Redemption.
 
 ## Current Features
 The Library Management Application offers the following features:
