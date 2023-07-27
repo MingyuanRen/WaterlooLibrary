@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../store'; 
+import { setUser } from '../store';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 import './Login.css';
 
 export const Login = () => {
@@ -29,17 +30,12 @@ export const Login = () => {
         console.log("user:", userDetails.data);
         dispatch(setUser(userDetails.data));
 
-        // Check if the user is an administrator and navigate accordingly
-        // if (res.data.is_admin) {
-        //   navigate('/admin-home'); // redirect to admin home page
-        // } else {
-        //   navigate('/home'); // redirect to user home page
-        // }
         if (res.data.is_admin) {
           navigate('/admin-home', { state: { user: userDetails.data } }); // redirect to admin home page
         } else {
-          navigate('/user-home', { state: { user: userDetails.data } }); // redirect to user home page
+          navigate('/search', { state: { user: userDetails.data } }); // redirect to search page
         }
+        
       }
     } catch (error) {
       alert(error.response.data.error);
@@ -50,22 +46,27 @@ export const Login = () => {
     <div className="container">
       <h1 className="header">Login</h1>
       <form className="login-form" onSubmit={login}>
-        <input 
-          // type="email"
-          name="email"
-          placeholder="Email"
-          className="input-field"
-          onChange={handleChange} 
-          required 
-        />
-        <input 
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="input-field"
-          onChange={handleChange}
-          required 
-        />
+        <div className="input-container">
+          <FaEnvelope className="input-icon" />
+          <input 
+            name="email"
+            placeholder="Email"
+            className="input-field"
+            onChange={handleChange} 
+            required 
+          />
+        </div>
+        <div className="input-container">
+          <FaLock className="input-icon" />
+          <input 
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="input-field"
+            onChange={handleChange}
+            required 
+          />
+        </div>
         <button type="submit" className="submit-btn">Login</button>
       </form>
     </div>

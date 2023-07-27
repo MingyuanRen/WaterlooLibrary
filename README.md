@@ -3,6 +3,8 @@
 This project is a database-driven application for managing a library. It uses MySQL as the database, Flask as the back-end server, and React for the front-end user interface.
 The Library Management Application is a robust and user-friendly solution designed to streamline the management of libraries. Leveraging the power of MySQL, Flask, and React, this application offers a comprehensive set of features for both users and administrators. Users can easily register and log in to access their personalized user page, where they can view their information, track borrow records, and conveniently search for, borrow, and reserve books. Administrators have access to an exclusive admin page, allowing them to efficiently add new books to the library, handle book returns, and conveniently view and edit user information. With its intuitive interface and powerful technology stack, the Library Management Application provides a seamless and efficient experience for managing libraries of any size.
 
+![Home Page](assets/homepage.png "Home Page")
+
 ## Technologies Used
 
 The application leverages the following technologies:
@@ -52,73 +54,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ```
 
-3. SQL SCHEMA
-```sql
-CREATE DATABASE library;
-
-USE library;
-
-CREATE TABLE IF NOT EXISTS Users (
-    uid INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    phone VARCHAR(10) NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS Books(
-    ISBN VARCHAR(13) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    year_of_publication DATE,
-    publisher VARCHAR(255),
-    genre VARCHAR(50),
-    inventory INT NOT NULL,
-    price DECIMAL(10,2) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS MemberUsers(
-    uid INT NOT NULL,
-    mID INT PRIMARY KEY AUTO_INCREMENT,
-    points INT NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    INDEX (uid),
-    FOREIGN KEY(uid) REFERENCES Users(uid)
-);
-
-CREATE TABLE IF NOT EXISTS Gifts(
-    item VARCHAR(255) PRIMARY KEY,
-    point_need INT NOT NULL,
-    inventory INT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS BorrowRecord(
-    rid INT PRIMARY KEY AUTO_INCREMENT,
-    uid INT NOT NULL REFERENCES Users(uid),
-    ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
-    renewable BOOLEAN NOT NULL,
-    DateBorrowed DATE NOT NULL,
-    DateDue DATE NOT NULL,
-    DateReturned DATE
-);
-
-CREATE TABLE IF NOT EXISTS Reservation(
-    uid INT NOT NULL REFERENCES MemberUsers(uid),
-    ISBN VARCHAR(13) NOT NULL REFERENCES Books(ISBN),
-    DateReserved DATE NOT NULL,
-    ExpireDate DATE NOT NULL,
-    PRIMARY KEY(uid, ISBN)
-);
-
-CREATE TABLE IF NOT EXISTS Redemption(
-    uid INT NOT NULL REFERENCES MemberUsers(uid),
-    item VARCHAR(255) NOT NULL REFERENCES Gifts(item),
-    date Date NOT NULL,
-    PRIMARY KEY(uid, item)
-);
-```
-
 ## How to Create Database 
 1. Create library schema in MySQL server or MySQL Workbench
 2. Change config for local database  
@@ -152,7 +87,7 @@ two ways of running the application:
 
 1. Docker-compose up
 ```bash
-  docker compose up
+  docker-compose up
 ```
 
 2. Run Frontend and Backend Separately: 
@@ -171,8 +106,8 @@ Run the React Frontend:
   npm start
 ```
 
-## Current Design of the GUI (To be Updated)
-MainPage: The Main Page for our WaterlooLibrary Application
+## Design of the GUI
+MainPage(HomePage): The Main Page for our WaterlooLibrary Application
 
 Register and Login Page: A secured register and login system for users.
 
@@ -181,7 +116,11 @@ User Page: A page showing the infomation of specific user including personal inf
 Search Book Page: A page showing a list/table of books with details (like ISBN, title, author, year of publication, publisher, inventory, price)
 Search bar to filter the list by different criteria (like title, author, ISBN).
 
+Borrow books and Reservations Page: A page allowing users to borrow or reserve books.
+
 Admin Page: A page for Administrators to manage user info, books inventory(add or return).
+
+Admin Application: A page for users to apply for administrator.
 
 Issue and Return Management: A system for checking books in and out, and updating the status of the books.
 
@@ -189,11 +128,7 @@ Adding Books Page: A page for Administrators to add books.
 
 Updating User Info Page: A page for updating user's Info like email, phone number(only accessible for admin).
 
-Redemption Page (To be Updated): A page for Redemption.
-
-Fine Management (To be Updated): A page to track these, issue reminders, and process payments.
-
-Reservations (To be Updated): A page allowing users to reserve books that are currently borrowed by others.
+Redemption Page: A page for Redemption.
 
 ## Current Features
 The Library Management Application offers the following features:
@@ -242,7 +177,7 @@ All the backend related implementation files can be found under WaterlooLibrary/
 
 ### Feature Pictures
 1. MainPage
-![MainPage](assets/mainpage.png "MainPage")
+![Home Page](assets/homepage.png "Home Page")
 
 ### User
 
@@ -274,21 +209,33 @@ which also contains User Profile page
 ### Administrator
 Some Features can only be achieved by Administrators(which are users in the Administrator table)
 
+And users can apply for administrator permissions, the application result will be sent to user's email.
+
 8. Administrator Page
-![Admin Page](assets/adminpage.jpg "Admin Page")
+![Admin Page](assets/Adminhome.png "Admin Page")
 
 9. Add Book
-![Add Book](assets/addBooks.jpeg "Add Book")
+![Add Book](assets/AddBook.png "Add Book")
 
 10. Return Book
-![Return Book](assets/returnBook.jpeg "Return Book")
+![Return Book](assets/ReturnBook.png "Return Book")
 
 11. View And Edit User Info
 ![Get User Info](assets/adminGetUserInfo.png "Get User Info")
 
-![User Info Example](assets/adminUserInfoExample.png "User Info Example")
+![User Info Example](assets/ViewUserinfo(NoInput).png "User Info Example")
 
-![Update User Info](assets/adminUserInfoChange.png "Update User Info")
+![User Info Example2](assets/ViewUserInfo(tworesults).png "User Info Example2")
+
+![Update User Info](assets/UpdateUserinfo.png "Update User Info")
+
+12. Admin Application
+![Admin Application](assets/Applications.png "Admin Application")
+
+![Approve Application](assets/ApproveEmail.png "Approve Application")
+
+![Disapprove Application](assets/DisapproveEmail.png "Disapprove Application")
+
 
 ## Sample and Production SQL
 -- All the queries, input and output for both production and sample db are listed under samples folder, more details can be found under this folde and from the main Report .

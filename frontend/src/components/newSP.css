@@ -1,0 +1,127 @@
+* {
+    box-sizing: border-box;
+  }
+
+.search-title {
+    /* position: relative; */
+    /* top: -100px; */
+    font-size: 60px;
+    /* margin-top: 100px; */
+    padding-bottom: 30px;
+    /* margin: 100px; */
+    font-family: Impact, fantasy;
+    text-align: center; 
+  }
+
+.filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.filterText {
+    text-align: left; 
+    padding-right: 10px;
+    padding-bottom: 10px;
+    font-size: medium;
+}
+
+.search-container{
+    width: 100%;
+    height: 100px;
+    /* display: flex;
+    flex-direction: row;  */
+    align-items: center;
+    justify-content: center;
+}
+
+
+.search-container>form {
+    display: flex;
+    width: 2300px;
+    flex-direction: row; 
+    justify-content: center;
+  }
+  
+.search-input {
+    border:2px solid gray;
+    outline:none;
+    font:14px/30px;
+    padding-left: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 40%;
+    border-radius: 5px;
+}
+
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 10px;
+    cursor: pointer;
+    font:5px;
+    width:100px;
+}
+
+.search-button:hover {
+    background-color: #0b5ed7;
+    color: whitesmoke;
+}
+
+  
+@media only screen and (max-width: 650px) {
+    .filters {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+  
+.filter-results {
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll_table {
+    display: flex;
+    flex-direction: row;
+    border:5px;
+    align-items: center;
+    justify-content: center;
+}
+.return_table {
+    align-items: center;
+    justify-content: center; 
+}
+
+.table_row {
+    /* padding-top: 30px; */
+    width:1030px;
+    align-items: center;
+    justify-content: center; 
+    border: 4px solid #ccc;
+    float: left;
+}
+
+.row_num_cell {
+    width:20px;
+}
+.row-num {
+    padding:5px 10px;
+    font-size: 15px;
+}
+
+
+.return_title {
+    padding:5px 10px;
+    padding-left: 30px;
+    font-size: 20px;
+}
+
+.return_author {
+    padding:5px 10px;
+    padding-left: 30px;
+    font-size: 20px;
+}
