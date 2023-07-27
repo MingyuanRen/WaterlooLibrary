@@ -37,7 +37,10 @@ def create_tables():
                 price DECIMAL(10,2) NOT NULL
             );
         """))
-
+        connection.execute(text("""
+            CREATE INDEX searchBook ON books (
+            isbn, title, author);
+        """))
         connection.execute(text("""
             CREATE TABLE IF NOT EXISTS MemberUsers(
                 uid INT NOT NULL,
@@ -69,6 +72,9 @@ def create_tables():
                 DateDue DATE NOT NULL,
                 DateReturned DATE
             );
+        """))
+        connection.execute(text("""
+             CREATE UNIQUE INDEX searchBorrow ON BorrowRecord (isbn);
         """))
 
         connection.execute(text("""
