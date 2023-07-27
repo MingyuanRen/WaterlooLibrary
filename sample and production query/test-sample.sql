@@ -124,4 +124,8 @@ WHERE uid = 1
 --- the related queris are viewing user info, membership info, and borrowed record
 --- of a user, which are contained in the previous queries.
 
+-- Admin Application
+-- Check admin application request
+SELECT * FROM AdminRequests WHERE aid = '1'
+
 

@@ -86,3 +86,5 @@ Login:
 ('Clara Callan', 'Richard Bruce Wright', datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), None)
 ("Monk's-hood", 'Ellis Peters', datetime.date(2020, 5, 1), datetime.date(2020, 5, 14), datetime.date(2020, 5, 10))
 
+Check Admin Request of a user:
+(1, 1)

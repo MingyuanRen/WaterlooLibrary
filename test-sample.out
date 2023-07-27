@@ -26,3 +26,5 @@ Check BorrowRecord of a user:
 Check BorrowRecord of a book:
 (3, 1, '12345678', 1, datetime.date(2023, 6, 17), datetime.date(2023, 7, 17), datetime.date(2023, 6, 17))
 
+Check Admin Request of a user:
+(1, 1)

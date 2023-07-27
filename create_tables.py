@@ -90,6 +90,14 @@ def create_tables():
             );
         """))
 
+        connection.execute(text("""
+            CREATE TABLE IF NOT EXISTS AdminRequests(
+                aid INT PRIMARY KEY AUTO_INCREMENT,
+                uid INT NOT NULL,
+                FOREIGN KEY(uid) REFERENCES Users(uid)
+            );
+        """))
+
 if __name__ == "__main__":
     try:
         with app.app_context():

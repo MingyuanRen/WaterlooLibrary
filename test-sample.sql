@@ -26,6 +26,6 @@ SELECT * FROM BorrowRecord WHERE uid = '1'
 -- Check borrow record of a book
 SELECT * FROM BorrowRecord WHERE ISBN = '12345678'
 
-
-
+-- Check admin application request
+SELECT * FROM AdminRequests WHERE aid = '1'
 

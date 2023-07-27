@@ -85,3 +85,6 @@ Update User's info (uid is auto generated, so it cannot be changed):
 
 Update member's info if the user is also a member:
 (1, 'user_name', 'sample@email.com', '1234567890', '12345')
+
+Check Admin Request of a user:
+(1, 1)
