@@ -179,14 +179,20 @@ def borrow_book():
     isbn = data['isbn']
 
     with db.engine.connect() as connection:
-        # Check if the book is available
-        book = connection.execute(text("SELECT * FROM Books WHERE ISBN = :isbn"), {"isbn": isbn}).fetchone()
-        inventory = 6
-        if not book or book[inventory] <= 0:
-            return jsonify({'message': 'This book is not available'}), 400
-
-        # Decrease the book inventory
-        connection.execute(text("UPDATE Books SET inventory = inventory - 1 WHERE ISBN = :isbn"), {"isbn": isbn})
+        DateBorrowed = datetime.now().date()
+        # check if book is already reserved
+        reserved = connection.execute(text("SELECT count(*) FROM Reservation WHERE uid = :uid AND ISBN = :isbn AND ExpireDate >= :today"), 
+                                      {"uid": uid, "isbn": isbn, "today": DateBorrowed}).fetchone()
+        
+        if reserved and reserved[0] == 1:
+            connection.execute(text("DELETE FROM Books WHERE uid = :uid AND ISBN = :isbn"), {"uid": uid, "isbn": isbn})
+        else:
+            book = connection.execute(text("SELECT * FROM Books WHERE ISBN = :isbn"), {"isbn": isbn}).fetchone()
+            inventory = book[6]
+            if not book or book[inventory] <= 0:
+                return jsonify({'message': 'This book is not available'}), 400
+            # Decrease the book inventory
+            connection.execute(text("UPDATE Books SET inventory = inventory - 1 WHERE ISBN = :isbn"), {"isbn": isbn})
 
         # Record the borrowing operation
         DateBorrowed = datetime.now()
@@ -224,7 +230,7 @@ def reserve_book():
             return jsonify({'message': 'This book is not available'}), 400
         
         # Check if user has reserved books < 5
-        reserved = connection.execute(text("SELECT count(*) FROM Reservation WHERE uid = :uid"), {"uid": uid}).fetchone()
+        reserved = connection.execute(text("SELECT count(*) FROM Reservation WHERE uid = :uid AND ExpireDate >= :today"), {"uid": uid}).fetchone()
         if reserved and reserved[0] == 5:
             return jsonify({'message': 'You have reached the limit for reservation'}), 400
 
