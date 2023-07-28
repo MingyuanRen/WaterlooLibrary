@@ -1,63 +1,98 @@
-.userInfo {
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 4px;
-    background: #FFF;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap; 
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  input[type="email"],
-  button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-  }
-  
-  button {
-    background: #007BFF;
-    color: white;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background: #0056b3;
-  }
-  
-  .error {
-    color: red;
-    margin: 10px 0;
-  }
-  
-  .editableFields, .nonEditableFields {
-    display: flex;
-    flex-direction: column;
-    margin-right: 20px;
-    align-items: flex-start;
-    max-width: 700x;
-    width: 100%
-  }
-  
-  .editableFields label, .nonEditableFields p {
-    margin: 10px 0;
-    width: 100%
-  }
-  
-  .editableFields input {
-    margin: 5px 0;
-    padding: 10px;
-    width: 100%
-  }
-  
+.viewUserInfo_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 1000px;
+  overflow-y: auto;
+}
+
+.viewUserInfo_header {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 1em;
+}
+
+.viewUserInfo_form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 1000px;
+  /* margin-bottom: 2em; */
+  padding: 20px
+}
+
+.viewUserInfo_userInfo {
+  margin: 10px;
+  padding: 20px;
+  border-radius: 4px;
+  background: #FFF;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  width: 1000px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; 
+  justify-content: center
+}
+
+.viewUserInfo_form input[type="email"],
+button {
+  margin: 5px;
+  padding: 10px 30px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: auto;
+  align-items: center;
+}
+
+button {
+  background: #007BFF;
+  color: white;
+  cursor: pointer;
+  align-items: center;
+}
+
+button:hover {
+  background: #0056b3;
+  align-items: center;
+}
+
+.viewUserInfo_updateButton{
+  justify-content: center;
+}
+
+.viewUserInfo_error {
+  color: red;
+  margin: 10px 0;
+}
+
+.viewUserInfo_editableFields,
+.viewUserInfo_nonEditableFields {
+  display: flex;
+  flex-direction: row;
+  /* align-items: flex-start; */
+  width: 1000px;
+  justify-content: center
+}
+
+.viewUserInfo_infoLabel {
+  font-weight: bold;
+}
+
+.viewUserInfo_infoSpan {
+  white-space: pre;
+}
+
+/* .viewUserInfo_editableFields label, */
+/* .viewUserInfo_nonEditableFields p {
+  margin: 10px 0;
+  width: 1000px;
+} */
+
+.viewUserInfo_editableFields input {
+  margin: 5px 0;
+  padding: 10px;
+  width: 100%;
+  display: inline-block;
+} 

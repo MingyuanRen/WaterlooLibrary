@@ -1,15 +1,54 @@
-.header {
-    color: #333;
-    font-size: 3rem;
-    margin: 2rem;
-  }
-  
-  .button {
-    margin: 1rem;
-    transition: all 0.3s ease;
-  }
-  
-  .button:hover {
-    transform: scale(1.1);
-  }
-  
+.myheader {
+  color: #333;
+  text-align: center;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.mybuttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mybutton {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 200px;
+}
+
+.mybutton:hover {
+  background-color: #0056b3;
+}
+
+.mybuttonContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.requestCount {
+  background-color: red;
+  color: white;
+  border-radius: 80%;
+  padding: 3px 10px;
+  font-size: 0.9rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(10%, -10%); /* this is to ensure the dot is centered on the top right corner of the button */
+}

@@ -1,50 +1,67 @@
-import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import styles from './AdminHome.module.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import styles from "./AdminHome.module.css";
 
 export const AdminHome = () => {
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
+  const [requestsCount, setRequestsCount] = useState(0);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get("/admin/requestsCount");
+      setRequestsCount(response.data.request_num);
+    }
+    fetchData();
+  }, []);
 
   let navigate = useNavigate();
 
   const goToAddBook = () => {
     navigate("/admin/addBook");
-  }
+  };
 
   const goToReturnBook = () => {
-    navigate("/admin/return")
-  }
+    navigate("/admin/return");
+  };
 
   const goToViewUser = () => {
-    navigate("/admin/viewUserInfo")
-  }
+    navigate("/admin/viewUserInfo");
+  };
+
+  const goToRequest = () => {
+    navigate("/admin/requests", { state: { user: user } });
+  };
 
   return (
-    <Container className="custom-container text-center">
-      <Row className="justify-content-md-center">
-        <Col md="auto">
-          <h1 className={styles.header}>Hi {user ? user.name : ''}! You are Admin Welcome to WaterlooLibrary!</h1>
-        </Col>
-      </Row>
-      <Row className="justify-content-md-center">
-        <Col md="auto">
-          <button className={`${styles.button} btn btn-primary btn-lg custom-button`} onClick={goToAddBook}>Add Book</button>
-        </Col>
-      </Row>
-      <Row className="justify-content-md-center">
-        <Col md="auto">
-          <button className={`${styles.button} btn btn-primary btn-lg custom-button`} onClick={goToReturnBook}>Return Book</button>
-        </Col>
-      </Row>
-      <Row className="justify-content-md-center">
-        <Col md="auto">
-          <button className={`${styles.button} btn btn-primary btn-lg custom-button`} onClick={goToViewUser}>View User Info</button>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <h1 className={styles.myheader}>
+        Hi {user ? user.name : ""}! <br /> Welcome to Waterloo Library Admin
+        Home
+      </h1>
+      <div className={styles.mybuttons}>
+        <button className={styles.mybutton} onClick={goToAddBook}>
+          Add Book
+        </button>
+        <button className={styles.mybutton} onClick={goToReturnBook}>
+          Return Book
+        </button>
+        <button className={styles.mybutton} onClick={goToViewUser}>
+          View User Info
+        </button>
+        {/* <p>Number of pending requests: {requestsCount}</p>
+        <button className={styles.mybutton} onClick={goToRequest}>Admin Job Requests</button> */}
+        <div className={styles.mybuttonContainer}>
+          <button className={styles.mybutton} onClick={goToRequest}>
+            Job Requests
+          </button>
+          {requestsCount > 0 && (
+            <div className={styles.requestCount}>{requestsCount}</div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
